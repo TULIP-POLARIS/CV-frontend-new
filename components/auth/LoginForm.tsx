@@ -1,114 +1,137 @@
 import React, { useState } from "react";
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView } from "react-native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
+
+export type RootStackParamList = {
+  MainTabs: undefined;
+  Register: undefined;
+  Login: undefined;
+};
 
 export default function LoginForm() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigation = useNavigation<NativeStackScreenProps<RootStackParamList>['navigation']>();
 
   const handleLogin = async () => {
-    if (!username || !password) {
-      Alert.alert("Error", "Please enter username and password");
+    if (!email || !password) {
+      Alert.alert("Error", "Please enter email and password");
       return;
     }
 
+    setLoading(true);
+
     try {
-      const response = await fetch("http://localhost:3000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          username,
-          password
-        })
-      });
+      const response = await fetch(
+        "https://cvapiappservice-dng8e8gmh0hvdbcr.francecentral-01.azurewebsites.net/api/auth/login", 
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
-      const data = await response.json();
+      const contentType = response.headers.get("content-type");
+      let data: any;
 
-      console.log("LOGIN RESPONSE", data);
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        data = await response.text(); 
+      }
 
-      Alert.alert("Success", "Logged in successfully!");
+      if (!response.ok) {
+        throw new Error(typeof data === "string" ? data : data.message || "Login failed");
+      }
 
-    } catch (error) {
-      console.log(error);
-      Alert.alert("Error", "Login failed");
+      console.log("Login success:", data);
+
+      Alert.alert("Success", "Logged in successfully!", [
+        { text: "OK", onPress: () => navigation.replace("MainTabs") },
+      ]);
+    } catch (error: any) {
+      console.error("Login error:", error);
+      Alert.alert("Login Failed", error.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome!</Text>
-      <Text style={styles.subtitle}>
-        Let’s turn your experience into opportunity.
-      </Text>
+    <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <View>
+        <Text style={styles.title}>Welcome!</Text>
+        <Text style={styles.subtitle}>Let’s turn your experience into opportunity.</Text>
 
-      <TextInput
-        placeholder="Username"
-        style={styles.input}
-        value={username}
-        onChangeText={setUsername}
-      />
+        <TextInput
+          placeholder="Email"
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
 
-      <TextInput
-        placeholder="Password"
-        secureTextEntry
-        style={styles.input}
-        value={password}
-        onChangeText={setPassword}
-      />
+        <TextInput
+          placeholder="Password"
+          secureTextEntry
+          style={styles.input}
+          value={password}
+          onChangeText={setPassword}
+        />
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
+          <Text style={styles.buttonText}>{loading ? "Logging in..." : "Login"}</Text>
+        </TouchableOpacity>
 
-      <Text style={styles.registerText}>
-        Don't have an account? Register
-      </Text>
-    </View>
+        <Pressable onPress={() => navigation.navigate("Register")}>
+          <Text style={styles.registerText}>Don't have an account? Register</Text>
+        </Pressable>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     padding: 30,
     justifyContent: "center",
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
   },
-
   title: {
     fontSize: 28,
     fontWeight: "bold",
-    marginBottom: 10
+    marginBottom: 10,
   },
-
   subtitle: {
     marginBottom: 40,
-    color: "#666"
+    color: "#666",
   },
-
   input: {
     borderWidth: 1,
     borderColor: "#ddd",
     padding: 15,
     borderRadius: 10,
-    marginBottom: 20
+    marginBottom: 20,
   },
-
   button: {
     backgroundColor: "#4A90E2",
     padding: 15,
     borderRadius: 10,
-    alignItems: "center"
+    alignItems: "center",
   },
-
   buttonText: {
     color: "#fff",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
-
   registerText: {
     marginTop: 20,
-    textAlign: "center"
-  }
+    textAlign: "center",
+    color: "#007AFF",
+  },
 });
