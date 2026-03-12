@@ -8,8 +8,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import LoginScreen from './screens/Auth/LoginScreen';
 import RegisterScreen from './screens/Auth/RegisterScreen';
 import HomePage from './screens/HomePage/HomePageScreen';
-import Profile from './components/Profile/Profile';
-
+import ProfileScreen from './screens/Profile/ProfileScreen';
+import EditProfileScreen from "./screens/Profile/EditProfileScreen";
 // Example screens for tabs
 function Settings() {
   return (
@@ -19,9 +19,7 @@ function Settings() {
   );
 }
 
-function ProfileScreen() {
-  return <Profile />;
-}
+
 
 // 1️⃣ Stack Navigator
 const Stack = createNativeStackNavigator();
@@ -63,7 +61,7 @@ function MainTabs() {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator initialRouteName="MainTabs">
         {/* Authentication Screens */}
         <Stack.Screen
           name="Login"
@@ -78,6 +76,11 @@ export default function App() {
           component={MainTabs}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+  name="EditProfile"
+  component={EditProfileScreen}
+  options={{ headerShown:false }}
+/>
       </Stack.Navigator>
     </NavigationContainer>
   );
