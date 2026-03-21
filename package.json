@@ -4,8 +4,8 @@
   "main": "index.ts",
   "scripts": {
     "start": "expo start",
-    "build": "expo export --output dist",
-    "build:web": "expo export --output dist",
+    "build": "expo export --output-dir dist",
+    "build:web": "expo export --output-dir dist",
     "deploy:hosting": "firebase deploy --only hosting",
     "android": "expo start --android",
     "ios": "expo start --ios",
