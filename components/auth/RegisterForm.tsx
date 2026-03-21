@@ -1,57 +1,76 @@
-import { StyleSheet, Text, View, Alert, TextInput, Button, Pressable } from 'react-native';
-import React from 'react';
+import { StyleSheet, Text, View, Alert, TextInput, TouchableOpacity, Pressable } from 'react-native';
+import React, { useState } from 'react';
 import { RootStackParamList } from './LoginForm';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export default function RegisterForm() {
-  const [name, setName] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [phoneNumber, setPhoneNumber] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const navigation = useNavigation<RootStackParamList>();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigation = useNavigation<NativeStackScreenProps<RootStackParamList>['navigation']>();
 
   const handleRegister = async () => {
-  if (!name || !email || !password || !phoneNumber) {
-    Alert.alert('Error', 'Please fill all fields');
-    return;
-  }
+    setError('');
+    if (!name || !email || !password || !phoneNumber) {
+      setError('Please fill all fields');
+      return;
+    }
 
-  try {
-    const response = await fetch(
-      'https://cvapiappservice-dng8e8gmh0hvdbcr.francecentral-01.azurewebsites.net/api/auth/register',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, email, password, phoneNumber }),
+    setLoading(true);
+
+    try {
+      const response = await fetch(
+        'https://cvapiappservice-dng8e8gmh0hvdbcr.francecentral-01.azurewebsites.net/api/auth/register',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name, email, password, phoneNumber }),
+        }
+      );
+
+      const contentType = response.headers.get('content-type');
+
+      let data;
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        data = await response.text();
       }
-    );
 
-    const contentType = response.headers.get('content-type');
+      if (!response.ok) {
+        const errorMessage = typeof data === 'string' ? data : data.message || 'Registration failed';
+        if (errorMessage.toLowerCase().includes('email already exists')) {
+            setError('This email is already registered.');
+        } else {
+            setError(errorMessage);
+        }
+        return;
+      }
 
-    let data;
-    if (contentType && contentType.includes('application/json')) {
-      data = await response.json();
-    } else {
-      data = await response.text(); // fallback to plain text
+      console.log('User Registered:', data);
+
+      navigation.navigate('Login');
+      Alert.alert('Success', 'Account created successfully!');
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      setError(error.message || 'Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
     }
+  };
 
-    if (!response.ok) {
-      // Server returned an error
-      throw new Error(typeof data === 'string' ? data : data.message || 'Registration failed');
+  const handleInputChange = (setter: (value: string) => void) => (value: string) => {
+    setter(value);
+    if (error) {
+      setError('');
     }
-
-    console.log('User Registered:', data);
-
-    Alert.alert('Success', 'Account created successfully!', [
-      { text: 'OK', onPress: () => navigation.navigate('Login') },
-    ]);
-  } catch (error: any) {
-    console.error('Registration error:', error);
-    Alert.alert('Registration Failed', error.message || 'Something went wrong. Please try again.');
-  }
-};;
+  };
 
   return (
     <View style={styles.container}>
@@ -61,7 +80,7 @@ export default function RegisterForm() {
         style={styles.input}
         placeholder="Full Name"
         value={name}
-        onChangeText={setName}
+        onChangeText={handleInputChange(setName)}
       />
 
       <TextInput
@@ -69,7 +88,8 @@ export default function RegisterForm() {
         placeholder="Email"
         keyboardType="email-address"
         value={email}
-        onChangeText={setEmail}
+        onChangeText={handleInputChange(setEmail)}
+        autoCapitalize="none"
       />
 
       <TextInput
@@ -77,7 +97,7 @@ export default function RegisterForm() {
         placeholder="Password"
         secureTextEntry
         value={password}
-        onChangeText={setPassword}
+        onChangeText={handleInputChange(setPassword)}
       />
 
       <TextInput
@@ -85,12 +105,16 @@ export default function RegisterForm() {
         placeholder="Phone Number"
         keyboardType="phone-pad"
         value={phoneNumber}
-        onChangeText={setPhoneNumber}
+        onChangeText={handleInputChange(setPhoneNumber)}
       />
 
-      <Button title="Register" onPress={handleRegister} />
+      {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-      <Pressable onPress={() => navigation.navigate('Login')}>
+      <TouchableOpacity style={styles.button} onPress={handleRegister} disabled={loading}>
+        <Text style={styles.buttonText}>{loading ? 'Registering...' : 'Register'}</Text>
+      </TouchableOpacity>
+
+      <Pressable onPress={() => navigation.navigate('Login')} disabled={loading}>
         <Text style={styles.registerText}>Already have an account? Login</Text>
       </Pressable>
     </View>
@@ -117,9 +141,25 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     borderRadius: 8,
   },
+  button: {
+    backgroundColor: '#4A90E2',
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
   registerText: {
     marginTop: 20,
     textAlign: 'center',
     color: '#007AFF',
+  },
+  errorText: {
+    color: 'red',
+    textAlign: 'center',
+    marginBottom: 10,
   },
 });
