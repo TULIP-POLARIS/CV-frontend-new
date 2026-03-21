@@ -4,13 +4,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-// Import your screens
+
 import LoginScreen from './screens/Auth/LoginScreen';
 import RegisterScreen from './screens/Auth/RegisterScreen';
 import HomePage from './screens/HomePage/HomePageScreen';
 import ProfileScreen from './screens/Profile/ProfileScreen';
 import EditProfileScreen from "./screens/Profile/EditProfileScreen";
-// Example screens for tabs
+
 function Settings() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -21,13 +21,13 @@ function Settings() {
 
 
 
-// 1️⃣ Stack Navigator
+
 const Stack = createNativeStackNavigator();
 
-// 2️⃣ Tab Navigator
+
 const Tab = createBottomTabNavigator();
 
-// Tab Navigator for main app after login
+
 function MainTabs() {
   return (
     <Tab.Navigator
@@ -39,11 +39,11 @@ function MainTabs() {
           let iconName: string = '';
 
           if (route.name === 'Home') {
-            iconName = 'home-outline'; // home icon
+            iconName = 'home-outline';
           } else if (route.name === 'Profile') {
-            iconName = 'person-outline'; // profile icon
+            iconName = 'person-outline'; 
           } else if (route.name === 'Settings') {
-            iconName = 'settings-outline'; // settings icon
+            iconName = 'settings-outline'; 
           }
 
           return <Icon name={iconName} size={size} color={color} />;
@@ -57,12 +57,12 @@ function MainTabs() {
   );
 }
 
-// Root App Navigator
+
 export default function App() {
   return (
     <NavigationContainer>
         <Stack.Navigator initialRouteName="MainTabs">
-        {/* Authentication Screens */}
+        
         <Stack.Screen
           name="Login"
           component={LoginScreen}
@@ -70,7 +70,7 @@ export default function App() {
         />
         <Stack.Screen name="Register" component={RegisterScreen} />
 
-        {/* Main app after login: Tabs */}
+      
         <Stack.Screen
           name="MainTabs"
           component={MainTabs}
