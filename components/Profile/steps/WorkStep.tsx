@@ -3,7 +3,7 @@ import {
   View, Text, TextInput,
   TouchableOpacity, StyleSheet, Platform,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Ionicons as Icon } from '@expo/vector-icons';
 
 export type WorkItem = {
   id: string;

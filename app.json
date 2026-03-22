@@ -37,7 +37,13 @@
             "usesCleartextTraffic": true
           }
         }
-      ]
-    ]
+      ],
+      "expo-web-browser"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "d4cd252c-a287-446b-89dd-101290b9195b"
+      }
+    }
   }
 }
