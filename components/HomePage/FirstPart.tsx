@@ -1,14 +1,14 @@
 import React from "react";
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function FirstPart() {
   return (
-    
+    <ScrollView>
     <View style={styles.container}>
 
       <View style={styles.header}>
 
-          {/* Welcome text */}
           <Text style={styles.headerTitle}>Welcome!</Text>
 
           <Text style={styles.headerSubtitle}>
@@ -16,7 +16,6 @@ export default function FirstPart() {
             Show the world who you are.
           </Text>
 
-          {/* Logo + buttons row */}
           <View style={styles.topRow}>
 
                 <Image
@@ -44,7 +43,7 @@ export default function FirstPart() {
 
     </View>
 
-          {/* Cards */}
+       
           <View style={styles.cardRow}>
             <View style={styles.card}>
               <Text style={styles.cardTitle}>Already have a CV?</Text>
@@ -57,19 +56,20 @@ export default function FirstPart() {
             </View>
           </View>
 
-          {/* Job description */}
+      
           <TextInput
             placeholder="Paste the job description or tell us in your own words!"
             style={styles.textArea}
             multiline
           />
 
-          {/* Button */}
+
           <TouchableOpacity style={styles.generateButton}>
             <Text style={styles.generateText}>Start Generate my cv</Text>
           </TouchableOpacity>
 
     </View>
+    </ScrollView>
   );
 }
 

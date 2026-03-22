@@ -1,15 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { Text, View } from 'react-native';
 
-export default function SettingsScreen() {
+export default function Settings() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Settings</Text>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Settings</Text>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  text: { fontSize: 18, color: '#333' },
-});
