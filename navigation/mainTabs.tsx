@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import HomePage from '../screens/HomePage/HomePageScreen';
 import Profile from '../screens/Profile/ProfileScreen';
 import Settings from '../screens/Settings/SettingsScreen';
+import PorofileScreen from '../screens/Profile/PorofileScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,7 +28,7 @@ export default function MainTabs() {
     >
       <Tab.Screen name="Home"     component={HomePage} />
       <Tab.Screen name="Settings" component={Settings} />
-      <Tab.Screen name="Profile"  component={Profile} />
+      <Tab.Screen name="Profile"  component={PorofileScreen} />
     </Tab.Navigator>
   );
 }
