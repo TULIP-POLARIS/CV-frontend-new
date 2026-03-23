@@ -17,7 +17,7 @@ import {
   FlatList,
   StatusBar,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Ionicons as Icon } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
 import { useTranslation } from '../../hooks/useTranslation';

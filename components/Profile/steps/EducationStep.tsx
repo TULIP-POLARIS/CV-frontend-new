@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Platform,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Ionicons as Icon } from '@expo/vector-icons';
 
 export type EducationItem = {
   id: string;
