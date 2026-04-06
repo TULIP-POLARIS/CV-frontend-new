@@ -23,8 +23,8 @@ export default function HomePageScreen() {
         <HomeHeader />
         <HomeActions defaultActive="generate" />
         <HomeCards
-          onUploadCV={() => {}}
-          onShareBackground={() => {}}
+          onUploadCV={(file) => console.log('Uploaded:', file.name)}
+          onShareBackground={(text) => console.log('Background:', text)}
         />
         <HomeJobInput
           jobTitle={jobTitle}
