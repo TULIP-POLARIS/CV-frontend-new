@@ -2,9 +2,8 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import HomePage from '../screens/HomePage/HomePageScreen';
-import Profile from '../screens/Profile/ProfileScreen';
+
 import Settings from '../screens/Settings/SettingsScreen';
-import ProfileScreen from '../screens/Profile/ProfileScreen';
 import PorofileScreen from '../screens/Profile/PorofileScreen';
 
 const Tab = createBottomTabNavigator();
