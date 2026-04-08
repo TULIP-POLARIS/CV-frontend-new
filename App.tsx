@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './screens/Auth/LoginScreen';
 import RegisterScreen from './screens/Auth/RegisterScreen';
+import { AuthProvider } from './context/AuthContext';
 
 import MainTabs from './navigation/mainTabs'; 
 import TemplateSelectScreen from "./screens/Cv/TemplateSelectScreen";
@@ -13,8 +14,9 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-        <Stack.Navigator initialRouteName="MainTabs">
+    <AuthProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
         
         <Stack.Screen
           name="Login"
@@ -85,5 +87,6 @@ export default function App() {
   */}
       </Stack.Navigator>
     </NavigationContainer>
+  </AuthProvider>
   );
 }
