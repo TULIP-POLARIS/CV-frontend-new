@@ -1,10 +1,305 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { Ionicons as Icon } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../types/navigation';
+import { useAuth } from '../../context/AuthContext';
+import { useTranslation, setLanguage, Language } from '../../hooks/useTranslation';
 
-export default function Settings() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings</Text>
+type NavProp = NativeStackNavigationProp<RootStackParamList>;
+
+const LANGUAGES: { code: Language; label: string; name: string }[] = [
+  { code: 'en', label: 'EN', name: 'English' },
+  { code: 'fi', label: 'FI', name: 'Suomi' },
+  { code: 'de', label: 'DE', name: 'Deutsch' },
+];
+
+export default function SettingsScreen() {
+  const navigation = useNavigation<NavProp>();
+  const { logout, email } = useAuth();
+  const { language } = useTranslation();
+  const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
+  const [langExpanded, setLangExpanded] = React.useState(false);
+
+  const handleLogout = () => {
+    Alert.alert('Logout', 'Are you sure you want to log out?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Logout',
+        style: 'destructive',
+        onPress: async () => {
+          await logout();
+          navigation.navigate('Login');
+        },
+      },
+    ]);
+  };
+
+  const SettingSection = ({
+    title,
+    children,
+  }: {
+    title: string;
+    children: React.ReactNode;
+  }) => (
+    <View style={styles.section}>
+      <Text style={styles.sectionTitle}>{title}</Text>
+      <View style={styles.sectionContent}>{children}</View>
     </View>
   );
+
+  const SettingItem = ({
+    label,
+    onPress,
+    rightElement,
+  }: {
+    label: string;
+    onPress?: () => void;
+    rightElement?: React.ReactNode;
+  }) => (
+    <TouchableOpacity
+      style={styles.settingItem}
+      onPress={onPress}
+      disabled={!onPress}
+    >
+      <Text style={styles.settingLabel}>{label}</Text>
+      {rightElement}
+    </TouchableOpacity>
+  );
+
+  return (
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <SettingSection title="Account">
+        <SettingItem
+          label="Edit Profile"
+          onPress={() => navigation.navigate('Profile')}
+        />
+        <View style={styles.divider} />
+        <SettingItem
+          label="Change Password"
+          onPress={() =>
+            Alert.alert('Coming Soon', 'Password change feature coming soon')
+          }
+        />
+        <View style={styles.divider} />
+        <SettingItem
+          label={`Email: ${email ?? 'Not available'}`}
+        />
+      </SettingSection>
+
+      <SettingSection title="App Settings">
+        <View style={styles.settingItem}>
+          <Text style={styles.settingLabel}>Push Notifications</Text>
+          <Switch
+            value={notificationsEnabled}
+            onValueChange={setNotificationsEnabled}
+            trackColor={{ false: '#767577', true: '#81c784' }}
+            thumbColor={notificationsEnabled ? '#4A90E2' : '#f4f3f4'}
+          />
+        </View>
+        <View style={styles.divider} />
+        <SettingItem
+          label="Dark Mode"
+          onPress={() =>
+            Alert.alert('Coming Soon', 'Dark mode feature coming soon')
+          }
+        />
+        <View style={styles.divider} />
+        <SettingItem
+          label="Language"
+          onPress={() => setLangExpanded((value) => !value)}
+          rightElement={
+            <View style={styles.menuItemRight}>
+              <Text style={styles.menuItemBadge}>
+                {LANGUAGES.find((l) => l.code === language)?.label}
+              </Text>
+              <Icon
+                name={langExpanded ? 'chevron-up-outline' : 'chevron-down-outline'}
+                size={16}
+                color="#90a4ae"
+                style={styles.menuItemIcon}
+              />
+            </View>
+          }
+        />
+        {langExpanded && (
+          <View style={styles.subMenu}>
+            {LANGUAGES.map((lang) => (
+              <TouchableOpacity
+                key={lang.code}
+                style={styles.subMenuItem}
+                onPress={() => {
+                  setLanguage(lang.code);
+                  setLangExpanded(false);
+                }}
+              >
+                <Text
+                  style={[
+                    styles.subMenuText,
+                    language === lang.code && styles.subMenuTextActive,
+                  ]}
+                >
+                  {lang.name}
+                </Text>
+                {language === lang.code && (
+                  <Icon name="checkmark" size={16} color="#3d6fd8" />
+                )}
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
+      </SettingSection>
+
+      <SettingSection title="Privacy & Support">
+        <SettingItem
+          label="Privacy Policy"
+          onPress={() =>
+            Alert.alert('Privacy Policy', 'Privacy policy content here')
+          }
+        />
+        <View style={styles.divider} />
+        <SettingItem
+          label="Terms of Service"
+          onPress={() =>
+            Alert.alert('Terms of Service', 'Terms and conditions here')
+          }
+        />
+        <View style={styles.divider} />
+        <SettingItem
+          label="Help & Support"
+          onPress={() =>
+            Alert.alert('Support', 'Contact us at FontysOulu@crosschecker.io')
+          }
+        />
+      </SettingSection>
+
+      <SettingSection title="About">
+        <SettingItem label="App Version: 1.0.0" />
+        <View style={styles.divider} />
+        <SettingItem
+          label="Check for Updates"
+          onPress={() => Alert.alert('Updates', 'You have the latest version')}
+        />
+      </SettingSection>
+
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Text style={styles.logoutText}>Logout</Text>
+      </TouchableOpacity>
+
+      <View style={styles.bottomPadding} />
+    </ScrollView>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  section: {
+    marginHorizontal: 16,
+    marginBottom: 20,
+    backgroundColor: 'white',
+    borderRadius: 12,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    backgroundColor: '#f9f9f9',
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  sectionContent: {
+    paddingBottom: 8,
+  },
+  settingItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+  },
+  settingLabel: {
+    fontSize: 15,
+    color: '#333',
+    flex: 1,
+  },
+  menuItemRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 8,
+  },
+  menuItemBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    backgroundColor: '#e8f0ff',
+    color: '#3d6fd8',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  menuItemIcon: {
+    marginLeft: 8,
+  },
+  subMenu: {
+    backgroundColor: '#f7f8fb',
+    marginHorizontal: 16,
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  subMenuItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e6e9ef',
+  },
+  subMenuText: {
+    fontSize: 15,
+    color: '#455a64',
+  },
+  subMenuTextActive: {
+    color: '#3d6fd8',
+    fontWeight: '700',
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#eee',
+  },
+  logoutButton: {
+    marginHorizontal: 16,
+    marginTop: 10,
+    backgroundColor: '#ff6b6b',
+    paddingVertical: 14,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  logoutText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  bottomPadding: {
+    height: 40,
+  },
+});

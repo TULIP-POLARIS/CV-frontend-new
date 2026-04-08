@@ -55,8 +55,9 @@ export default function RegisterForm() {
 
       console.log('User Registered:', data);
 
-      navigation.navigate('Login');
-      Alert.alert('Success', 'Account created successfully!');
+      Alert.alert('Success', 'Account created successfully!', [
+        { text: 'OK', onPress: () => navigation.navigate('Login') },
+      ]);
     } catch (error: any) {
       console.error('Registration error:', error);
       setError(error.message || 'Something went wrong. Please try again.');

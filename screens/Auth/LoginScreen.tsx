@@ -93,16 +93,18 @@ export default function LoginScreen({ navigation, setIsLoggedIn }: Props) {
         );
       }
 
-      await login(data.token);
+     
 
       
-      setIsLoggedIn(true);
+     
 
+      await login(data.token, email);
       navigation.reset({ index: 0, routes: [{ name: 'MainTabs' }] });
     } catch (error: any) {
       Alert.alert(t('login.loginFailed'), error.message || t('login.somethingWentWrong'));
     } finally {
       setLoading(false);
+      setIsLoggedIn(true);
     }
   };
 

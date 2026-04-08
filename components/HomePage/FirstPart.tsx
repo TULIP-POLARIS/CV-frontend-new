@@ -1,8 +1,10 @@
 import React from "react";
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
 export default function FirstPart() {
+  const navigation = useNavigation();
   return (
     <ScrollView>
     <View style={styles.container}>
@@ -23,7 +25,7 @@ export default function FirstPart() {
                   style={styles.logo}
                 />
             <View style={styles.buttonColumn}>
-              <TouchableOpacity style={[styles.smallButton, styles.btn1]}>
+              <TouchableOpacity style={[styles.smallButton, styles.btn1]} onPress={()=>{navigation.navigate('Profile')}}>
                 <Text style={styles.smallButtonText}>My Profile</Text>
               </TouchableOpacity>
 
