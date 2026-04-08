@@ -28,7 +28,7 @@ export default function MainTabs() {
     >
       <Tab.Screen name="Home"     component={HomePage} />
       <Tab.Screen name="Settings" component={Settings} />
-      <Tab.Screen name="Porofile"  component={PorofileScreen} />
+      <Tab.Screen name="Profile"  component={PorofileScreen} />
     </Tab.Navigator>
   );
 }
