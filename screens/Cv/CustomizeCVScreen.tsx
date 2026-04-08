@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 export default function CustomizeCVScreen({ navigation, route }: any) {
-  const { data } = route.params;
-
+  const data = route.params?.data || {}; 
   const [primaryColor, setPrimaryColor] = useState("#2F3E4D");
 
   return (
