@@ -7,6 +7,9 @@ export type RootStackParamList = {
   Profile: undefined;
   ForgotPassword: undefined;
   CheckEmail: { email: string };
+  TemplateSelect: { data: any };
+  CustomizeCV: { data: any };
+  CVPreview: { data: any; primaryColor: string };
 };
 
 export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;

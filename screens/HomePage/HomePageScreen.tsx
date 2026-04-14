@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  ScrollView,
-  StyleSheet,
-} from 'react-native';
+import { View, ScrollView, StyleSheet } from 'react-native';
 import HomeHeader from '../../components/HomePage/HomeHeader';
 import HomeActions from '../../components/HomePage/HomeActions';
 import HomeCards from '../../components/HomePage/HomeCards';
@@ -11,8 +7,18 @@ import HomeJobInput from '../../components/HomePage/HomeJobInput';
 import HomeFooter from '../../components/HomePage/HomeFooter';
 
 export default function HomePageScreen() {
-  const [jobTitle, setJobTitle]             = useState('');
+  const [jobTitle, setJobTitle] = useState('');
   const [jobDescription, setJobDescription] = useState('');
+  const [uploadedCV, setUploadedCV] = useState<any>(null);
+  const [background, setBackground] = useState('');
+
+  const cvData = {
+    jobTitle,
+    jobDescription,
+    uploadedCV: uploadedCV?.name,
+    background,
+    phone: '',
+  };
 
   return (
     <View style={styles.safe}>
@@ -23,8 +29,8 @@ export default function HomePageScreen() {
         <HomeHeader />
         <HomeActions defaultActive="generate" />
         <HomeCards
-          onUploadCV={(file) => console.log('Uploaded:', file.name)}
-          onShareBackground={(text) => console.log('Background:', text)}
+          onUploadCV={(file) => setUploadedCV(file)}
+          onShareBackground={(text) => setBackground(text)}
         />
         <HomeJobInput
           jobTitle={jobTitle}
@@ -33,8 +39,8 @@ export default function HomePageScreen() {
           onJobDescriptionChange={setJobDescription}
         />
         <HomeFooter
-          onGenerate={() => {}}
           onReadPrivacy={() => {}}
+          data={cvData} 
         />
       </ScrollView>
     </View>
@@ -42,6 +48,6 @@ export default function HomePageScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe:   { flex: 1, backgroundColor: '#ffffff' },
+  safe: { flex: 1, backgroundColor: '#ffffff' },
   scroll: { paddingBottom: 48 },
 });

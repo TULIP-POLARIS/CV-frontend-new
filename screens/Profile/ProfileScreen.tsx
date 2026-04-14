@@ -1,33 +1,39 @@
-import React from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import React, { useState } from 'react';
+import { View, ScrollView, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../types/navigation';
+import ProfileHeader from '../../components/Profile/ProfileHeader';
+import HomeActions from '../../components/HomePage/HomeActions';
+import ProfileStepper from '../../components/Profile/ProfileStepper';
 
-import ProfileHeader from "./ProfileHeader";
-import ProfileStats from "./ProfileStats";
-import ProfileCompletion from "./ProfileCompletion";
-import PersonalInfoSection from "./PersonalInfoSection";
-import SkillsSection from "./SkillsSection";
-import ExperienceSection from "./ExperienceSection";
-import EducationSection from "./EducationSection";
-import LanguagesSection from "./LanguagesSection";
+type NavProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function ProfileScreen() {
+  const navigation = useNavigation<NavProp>();
+  const [currentStep, setCurrentStep] = useState(0);
+
   return (
-    <ScrollView style={styles.container}>
-      <ProfileHeader />
-      <ProfileStats />
-      <ProfileCompletion />
-      <PersonalInfoSection />
-      <SkillsSection />
-      <ExperienceSection />
-      <EducationSection />
-      <LanguagesSection />
-    </ScrollView>
+    <View style={styles.safe}>
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        showsVerticalScrollIndicator={false}
+      >
+        <ProfileHeader />
+        <HomeActions
+          defaultActive="profile"
+          onGeneratePress={() => navigation.reset({ index: 0, routes: [{ name: 'MainTabs' }] })}
+        />
+        <ProfileStepper
+          currentStep={currentStep}
+          onStepChange={setCurrentStep}
+        />
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F3F6FB",
-  },
+  safe:   { flex: 1, backgroundColor: '#ffffff' },
+  scroll: { paddingBottom: 48 },
 });

@@ -1,13 +1,17 @@
-import React from "react";
-import { ScrollView } from "react-native";
-import CVTemplate from "../../components/cv/CVTemplate";
+import React from 'react';
+import { View } from 'react-native';
+import CVTemplate from '../../components/cv/CVTemplate';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../types/navigation';
 
-export default function CVPreviewScreen({ route }: any) {
+type Props = NativeStackScreenProps<RootStackParamList, 'CVPreview'>;
+
+export default function CVPreviewScreen({ route }: Props) {
   const { data, primaryColor } = route.params;
 
   return (
-    <ScrollView>
+    <View style={{ flex: 1 }}>
       <CVTemplate data={data} primaryColor={primaryColor} />
-    </ScrollView>
+    </View>
   );
 }
