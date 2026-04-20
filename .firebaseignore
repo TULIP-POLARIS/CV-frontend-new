@@ -1,0 +1,5 @@
+# Firebase Hosting ignore file
+# When present, firebase deploy uses this file instead of .gitignore.
+# Do not ignore any dist contents so exported web assets and bundled font files are deployed.
+firebase.json
+**/.*

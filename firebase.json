@@ -6,7 +6,7 @@
       "**/.*"
     ],
     "headers": [{
-          "source": "**/*.@(ttf|eot|svg|woff|woff2)",
+          "source": "**/*.@(ttf|otf|eot|svg|woff|woff2)",
           "headers": [{
           "key": "Access-Control-Allow-Origin",
           "value": "*"}]
