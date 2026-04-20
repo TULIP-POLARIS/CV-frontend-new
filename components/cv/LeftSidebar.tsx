@@ -28,23 +28,33 @@ export default function LeftSidebar({ data }: Props) {
       ))}
 
       {/* CONTACT */}
-      <Text style={styles.heading}>CONTACT</Text>
-      <View style={styles.divider} />
+      {data.contact && (
+        <>
+          <Text style={styles.heading}>CONTACT</Text>
+          <View style={styles.divider} />
 
-      <View style={styles.row}>
-        <Ionicons name="call-outline" size={14} />
-        <Text style={styles.text}>{data.contact.phone}</Text>
-      </View>
+          {data.contact.phone && (
+            <View style={styles.row}>
+              <Ionicons name="call-outline" size={14} />
+              <Text style={styles.text}>{data.contact.phone}</Text>
+            </View>
+          )}
 
-      <View style={styles.row}>
-        <Ionicons name="mail-outline" size={14} />
-        <Text style={styles.text}>{data.contact.email}</Text>
-      </View>
+          {data.contact.email && (
+            <View style={styles.row}>
+              <Ionicons name="mail-outline" size={14} />
+              <Text style={styles.text}>{data.contact.email}</Text>
+            </View>
+          )}
 
-      <View style={styles.row}>
-        <Ionicons name="location-outline" size={14} />
-        <Text style={styles.text}>{data.contact.address}</Text>
-      </View>
+          {data.contact.address && (
+            <View style={styles.row}>
+              <Ionicons name="location-outline" size={14} />
+              <Text style={styles.text}>{data.contact.address}</Text>
+            </View>
+          )}
+        </>
+      )}
 
     </View>
   );

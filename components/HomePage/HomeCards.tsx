@@ -17,6 +17,7 @@ import {
 import { Ionicons as Icon } from '@expo/vector-icons';
 import { useTranslation } from '../../hooks/useTranslation';
 import * as DocumentPicker from 'expo-document-picker';
+import { useAuth } from '../../context/AuthContext';
 
 const ROBOT_IMAGE = require('../../assets/robot.png');
 
@@ -30,6 +31,7 @@ type Props = {
 
 export default function HomeCards({ onUploadCV, onShareBackground }: Props) {
   const { t } = useTranslation();
+  const { token } = useAuth();
 
   const [uploadModal, setUploadModal]         = useState(false);
   const [backgroundModal, setBackgroundModal] = useState(false);
@@ -52,15 +54,45 @@ export default function HomeCards({ onUploadCV, onShareBackground }: Props) {
     }
   };
 
+
   const handleUpload = async () => {
-    if (!selectedFile) return;
-    setUploading(true);
-    try {
+  if (!selectedFile) return;
+  setUploading(true);
+  try {
+    const formData = new FormData();
+    formData.append('file', {
+      uri: selectedFile.uri,
+      type: 'application/pdf',
+      name: selectedFile.name,
+    } as any);
+
+      const response = await fetch(
+        'https://cvapiappservice-dng8e8gmh0hvdbcr.francecentral-01.azurewebsites.net/api/cv/upload',
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+          body: formData,
+        }
+      );
+
+      const contentType = response.headers.get('content-type');
+      const data = contentType?.includes('application/json')
+        ? await response.json()
+        : await response.text();
+
+      if (!response.ok) {
+        throw new Error(typeof data === 'string' ? data : data.message || 'Upload failed');
+      }
+
       onUploadCV(selectedFile);
       setUploadModal(false);
       setSelectedFile(null);
-    } catch {
-      Alert.alert('Error', 'Upload failed. Please try again.');
+      Alert.alert('Success', 'CV uploaded successfully!');
+    } catch (error: any) {
+      Alert.alert('Error', error.message || t('home.errorUpload'));
     } finally {
       setUploading(false);
     }
