@@ -4,9 +4,10 @@
   "main": "index.ts",
   "scripts": {
     "start": "expo start",
+    "clean": "powershell -NoProfile -Command \"if (Test-Path dist) { Remove-Item -Recurse -Force dist }\"",
     "build": "expo export --output-dir dist",
-    "build:web": "expo export --output-dir dist",
-    "deploy:hosting": "firebase deploy --only hosting",
+    "build:web": "expo export --platform web --output-dir dist",
+    "deploy:hosting": "npx firebase deploy --only hosting",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web"
@@ -34,12 +35,10 @@
     "react-native-reanimated": "~4.1.1",
     "react-native-safe-area-context": "~5.6.2",
     "react-native-screens": "~4.16.0",
-    "react-native-vector-icons": "^10.3.0",
     "react-native-web": "^0.21.0"
   },
   "devDependencies": {
     "@types/react": "~19.1.10",
-    "@types/react-native-vector-icons": "^6.4.18",
     "typescript": "~5.9.2"
   },
   "private": true
