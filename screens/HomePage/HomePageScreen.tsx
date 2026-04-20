@@ -48,6 +48,6 @@ export default function HomePageScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#ffffff' },
+  safe: { flex: 1, width: '100%', maxWidth:430 , alignSelf: 'center',backgroundColor: '#ffffff' },
   scroll: { paddingBottom: 48 },
 });
