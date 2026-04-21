@@ -10,6 +10,7 @@ export type RootStackParamList = {
   TemplateSelect: { data: any };
   CustomizeCV: { data: any };
   CVPreview: { data: any; primaryColor: string };
+  UsageMetrics: undefined;
 };
 
 export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;

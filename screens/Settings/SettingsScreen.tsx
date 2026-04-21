@@ -115,6 +115,14 @@ export default function SettingsScreen() {
         />
         <View style={styles.divider} />
         <SettingItem
+          label="Usage Metrics"
+          onPress={() => navigation.navigate('UsageMetrics')}
+          rightElement={
+            <Icon name="stats-chart-outline" size={20} color="#90a4ae" />
+          }
+        />
+        <View style={styles.divider} />
+        <SettingItem
           label="Language"
           onPress={() => setLangExpanded((value) => !value)}
           rightElement={
