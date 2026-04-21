@@ -9,25 +9,26 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+// ایمپورت hook ترجمه از سیستم موجود پروژه
+// مسیر را بر اساس ساختار پروژه‌ات تنظیم کن
 import { useTranslation, setLanguage, Language } from "../../hooks/useTranslation";
-import HamburgerMenu from "../../components/HamburgerMenu"; // ← مسیر را با پروژه‌ات تطبیق بده
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ۱. تایپ رنگ‌های یک تم
+// ۱. تایپ رنگ‌های یک تم — متون از i18n می‌آیند، اینجا فقط رنگ داریم
 // ─────────────────────────────────────────────────────────────────────────────
 type Theme = {
-  id: string;
-  headerColor: string;
-  sidebarColor: string;
-  accentColor: string;
-  sidebarText: string;
-  mainBg: string;
-  sectionColor: string;
-  swatches: string[];
+  id: string;          // باید با کلیدهای customizeCV.themes در فایل‌های ترجمه یکسان باشد
+  headerColor: string;   // رنگ هدر بالای CV
+  sidebarColor: string;  // رنگ پس‌زمینه‌ی ستون کناری
+  accentColor: string;   // رنگ تاکیدی (تیترها، خطوط جداکننده)
+  sidebarText: string;   // رنگ متن داخل ستون کناری
+  mainBg: string;        // رنگ پس‌زمینه‌ی محتوای اصلی
+  sectionColor: string;  // رنگ تیترهای بخش‌ها
+  swatches: string[];    // ۴ رنگ نمونه برای نمایش در کارت
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ۲. لیست تم‌ها
+// ۲. لیست تم‌ها — فقط رنگ، بدون هیچ متنی
 // ─────────────────────────────────────────────────────────────────────────────
 const THEMES: Theme[] = [
   {
@@ -51,6 +52,26 @@ const THEMES: Theme[] = [
     swatches: ["#1B2A4A", "#C9A84C", "#E8D9B5", "#FAFAF8"],
   },
   {
+    id: "slateTeal",
+    headerColor: "#2D3748",
+    sidebarColor: "#1A2535",
+    accentColor: "#38B2AC",
+    sidebarText: "#B2F5F0",
+    mainBg: "#FFFFFF",
+    sectionColor: "#2D3748",
+    swatches: ["#2D3748", "#38B2AC", "#B2F5F0", "#FFFFFF"],
+  },
+  {
+    id: "charcoalCoral",
+    headerColor: "#2C2C2C",
+    sidebarColor: "#1E1E1E",
+    accentColor: "#E8745A",
+    sidebarText: "#F5C4B8",
+    mainBg: "#FEFEFE",
+    sectionColor: "#2C2C2C",
+    swatches: ["#2C2C2C", "#E8745A", "#F5C4B8", "#FEFEFE"],
+  },
+  {
     id: "forestSand",
     headerColor: "#2D4A3E",
     sidebarColor: "#1F3329",
@@ -72,7 +93,79 @@ const THEMES: Theme[] = [
   },
 ];
 
+// زبان‌های پشتیبانی‌شده برای نمایش در انتخابگر
+const LANGUAGE_OPTIONS: { code: Language; label: string }[] = [
+  { code: "en", label: "English" },
+  { code: "de", label: "Deutsch" },
+  { code: "fi", label: "Suomi" },
+];
 
+// ─────────────────────────────────────────────────────────────────────────────
+// ۳. کامپوننت انتخاب زبان — EN / DE / FI
+//    با کلیک روی هر دکمه، setLanguage صدا زده می‌شود
+//    چون useTranslation به listeners subscribe است، کل صفحه re-render می‌شود
+// ─────────────────────────────────────────────────────────────────────────────
+function LanguagePicker({ current }: { current: Language }) {
+  return (
+    <View style={langStyles.row}>
+      {LANGUAGE_OPTIONS.map((opt) => {
+        const isActive = current === opt.code;
+        return (
+          <TouchableOpacity
+            key={opt.code}
+            onPress={() => setLanguage(opt.code)}
+            style={[langStyles.btn, isActive && langStyles.btnActive]}
+            activeOpacity={0.75}
+          >
+            <Text style={[langStyles.code, isActive && langStyles.codeActive]}>
+              {opt.code.toUpperCase()}
+            </Text>
+            <Text style={[langStyles.label, isActive && langStyles.labelActive]}>
+              {opt.label}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+}
+
+const langStyles = StyleSheet.create({
+  row: {
+    flexDirection: "row",
+    gap: 8,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    backgroundColor: "#FFFFFF",
+    borderBottomWidth: 1,
+    borderBottomColor: "#F0F0F5",
+  },
+  btn: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 5,
+    paddingVertical: 7,
+    borderRadius: 10,
+    backgroundColor: "#F4F4F8",
+    borderWidth: 1.5,
+    borderColor: "transparent",
+  },
+  btnActive: {
+    backgroundColor: "#EEF3FF",
+    borderColor: "#5B8DEF",
+  },
+  code: { fontSize: 11, fontWeight: "800", color: "#999", letterSpacing: 0.5 },
+  codeActive: { color: "#3D6FD4" },
+  label: { fontSize: 12, color: "#888", fontWeight: "500" },
+  labelActive: { color: "#3D6FD4", fontWeight: "700" },
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ۴. کامپوننت پیش‌نمایش مینیاتور CV
+//    t() برای گرفتن هر متن استفاده می‌شود — کلیدها از customizeCV.miniCV می‌آیند
+// ─────────────────────────────────────────────────────────────────────────────
 function MiniCVPreview({
   theme,
   t,
@@ -82,12 +175,16 @@ function MiniCVPreview({
 }) {
   return (
     <View style={[miniStyles.container, { backgroundColor: theme.mainBg }]}>
+
+      {/* هدر: اسم نمادین ثابت + عنوان شغلی از ترجمه */}
       <View style={[miniStyles.header, { backgroundColor: theme.headerColor }]}>
         <Text style={miniStyles.headerName}>ALEX RIVERA</Text>
         <Text style={miniStyles.headerTitle}>{t("customizeCV.miniCV.title")}</Text>
       </View>
 
       <View style={miniStyles.body}>
+
+        {/* ستون کناری */}
         <View style={[miniStyles.sidebar, { backgroundColor: theme.sidebarColor }]}>
           <Text style={[miniStyles.sbLabel, { color: theme.accentColor }]}>
             {t("customizeCV.miniCV.skills")}
@@ -109,6 +206,7 @@ function MiniCVPreview({
           </Text>
         </View>
 
+        {/* ستون اصلی */}
         <View style={miniStyles.main}>
           <Text style={[miniStyles.section, { color: theme.sectionColor, borderBottomColor: theme.accentColor }]}>
             {t("customizeCV.miniCV.education")}
@@ -122,6 +220,7 @@ function MiniCVPreview({
           <Text style={miniStyles.mainTitle}>{t("customizeCV.miniCV.jobTitle")}</Text>
           <Text style={miniStyles.mainSub}>{t("customizeCV.miniCV.jobPeriod")}</Text>
         </View>
+
       </View>
     </View>
   );
@@ -150,7 +249,7 @@ const miniStyles = StyleSheet.create({
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ۴. کامپوننت کارت هر تم
+// ۵. کامپوننت کارت هر تم
 // ─────────────────────────────────────────────────────────────────────────────
 function ThemeCard({
   theme,
@@ -183,24 +282,31 @@ function ThemeCard({
           isSelected && { borderColor: theme.accentColor, borderWidth: 2.5 },
         ]}
       >
+        {/* تیک انتخاب */}
         {isSelected && (
           <View style={[cardStyles.checkBadge, { backgroundColor: theme.accentColor }]}>
             <Ionicons name="checkmark" size={10} color="#fff" />
           </View>
         )}
 
+        {/* پیش‌نمایش مینیاتور */}
         <View style={cardStyles.previewBox}>
           <MiniCVPreview theme={theme} t={t} />
         </View>
 
+        {/* اطلاعات متنی */}
         <View style={cardStyles.info}>
           <View style={[cardStyles.accentBar, { backgroundColor: theme.accentColor }]} />
+
+          {/* نام و توضیح تم — کلید پویا بر اساس id تم */}
           <Text style={cardStyles.name}>
             {t(`customizeCV.themes.${theme.id}.name`)}
           </Text>
           <Text style={cardStyles.desc} numberOfLines={2}>
             {t(`customizeCV.themes.${theme.id}.desc`)}
           </Text>
+
+          {/* ۴ نمونه رنگ */}
           <View style={cardStyles.swatchRow}>
             {theme.swatches.map((color, i) => {
               const isLight = ["#FFFFFF","#FEFEFE","#FAF8F4","#FAFAF8","#FDF9FB"].includes(color);
@@ -265,10 +371,13 @@ const cardStyles = StyleSheet.create({
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ۵. کامپوننت اصلی صفحه
+// ۶. کامپوننت اصلی صفحه
 // ─────────────────────────────────────────────────────────────────────────────
 export default function CustomizeCVScreen({ navigation, route }: any) {
   const data = route.params?.data || {};
+
+  // useTranslation از hook موجود پروژه
+  // هر بار که setLanguage صدا زده شود، این کامپوننت به صورت خودکار re-render می‌شود
   const { t, language } = useTranslation();
 
   const [selectedId, setSelectedId] = useState<string>("ocean");
@@ -277,7 +386,7 @@ export default function CustomizeCVScreen({ navigation, route }: any) {
   const handlePreview = () => {
     navigation.navigate("CVPreview", {
       data,
-      language,
+      language, // زبان فعلی برای صفحه‌ی بعد
       theme: {
         headerColor:  selectedTheme.headerColor,
         sidebarColor: selectedTheme.sidebarColor,
@@ -303,9 +412,11 @@ export default function CustomizeCVScreen({ navigation, route }: any) {
           <Text style={styles.headerSub}>{t("customizeCV.pageSubtitle")}</Text>
         </View>
 
-        {/* ← منوی همبرگری جایگزین دکمه‌های زبان شد */}
-        <HamburgerMenu tintColor="#1A1A2E" />
+        <View style={{ width: 38 }} />
       </View>
+
+      {/* ══ انتخابگر زبان ══ */}
+      <LanguagePicker current={language} />
 
       {/* ══ نوار نشانگر تم انتخابی ══ */}
       <View style={[styles.selectedBar, { borderLeftColor: selectedTheme.accentColor }]}>
@@ -368,7 +479,7 @@ export default function CustomizeCVScreen({ navigation, route }: any) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ۶. استایل‌های صفحه
+// ۷. استایل‌های صفحه
 // ─────────────────────────────────────────────────────────────────────────────
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: "#F7F8FC" },

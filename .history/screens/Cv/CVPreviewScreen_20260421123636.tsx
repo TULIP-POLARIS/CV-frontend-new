@@ -7,6 +7,7 @@ import { RootStackParamList } from '../../types/navigation';
 type Props = NativeStackScreenProps<RootStackParamList, 'CVPreview'>;
 
 export default function CVPreviewScreen({ route }: Props) {
+  // language هم از params می‌آید — از CustomizeCVScreen پاس داده شده
   const { data, theme, language } = route.params;
 
   return (

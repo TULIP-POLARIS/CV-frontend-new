@@ -7,16 +7,17 @@ import HomeJobInput from '../../components/HomePage/HomeJobInput';
 import HomeFooter from '../../components/HomePage/HomeFooter';
 
 export default function HomePageScreen() {
-  const [jobTitle, setJobTitle]         = useState('');
+  const [jobTitle, setJobTitle] = useState('');
   const [jobDescription, setJobDescription] = useState('');
-  const [uploadedCV, setUploadedCV]     = useState<any>(null);
-  const [background, setBackground]     = useState('');
+  const [uploadedCV, setUploadedCV] = useState<any>(null);
+  const [background, setBackground] = useState('');
 
   const cvData = {
     jobTitle,
     jobDescription,
     uploadedCV: uploadedCV?.name,
     background,
+    phone: '',
   };
 
   return (
@@ -39,7 +40,7 @@ export default function HomePageScreen() {
         />
         <HomeFooter
           onReadPrivacy={() => {}}
-          data={cvData}
+          data={cvData} 
         />
       </ScrollView>
     </View>
@@ -47,6 +48,6 @@ export default function HomePageScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe:   { flex: 1, backgroundColor: '#ffffff' },
+  safe: { flex: 1, backgroundColor: '#ffffff' },
   scroll: { paddingBottom: 48 },
 });

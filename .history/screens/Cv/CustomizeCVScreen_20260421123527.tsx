@@ -51,6 +51,26 @@ const THEMES: Theme[] = [
     swatches: ["#1B2A4A", "#C9A84C", "#E8D9B5", "#FAFAF8"],
   },
   {
+    id: "slateTeal",
+    headerColor: "#2D3748",
+    sidebarColor: "#1A2535",
+    accentColor: "#38B2AC",
+    sidebarText: "#B2F5F0",
+    mainBg: "#FFFFFF",
+    sectionColor: "#2D3748",
+    swatches: ["#2D3748", "#38B2AC", "#B2F5F0", "#FFFFFF"],
+  },
+  {
+    id: "charcoalCoral",
+    headerColor: "#2C2C2C",
+    sidebarColor: "#1E1E1E",
+    accentColor: "#E8745A",
+    sidebarText: "#F5C4B8",
+    mainBg: "#FEFEFE",
+    sectionColor: "#2C2C2C",
+    swatches: ["#2C2C2C", "#E8745A", "#F5C4B8", "#FEFEFE"],
+  },
+  {
     id: "forestSand",
     headerColor: "#2D4A3E",
     sidebarColor: "#1F3329",
@@ -72,7 +92,9 @@ const THEMES: Theme[] = [
   },
 ];
 
-
+// ─────────────────────────────────────────────────────────────────────────────
+// ۳. کامپوننت پیش‌نمایش مینیاتور CV
+// ─────────────────────────────────────────────────────────────────────────────
 function MiniCVPreview({
   theme,
   t,
