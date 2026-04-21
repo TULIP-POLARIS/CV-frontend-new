@@ -60,7 +60,9 @@ export type GeneratedCVProfile = {
   lastName: string;
   dateOfBirth?: string;
   phoneNumber?: string;
+  email?: string;
   address?: string;
+  linkedin?: string;
   nationality?: string;
   gender?: string;
   countryOfResidence?: string;

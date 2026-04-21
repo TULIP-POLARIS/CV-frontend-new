@@ -53,6 +53,11 @@ function transformGeneratedCVToCVData(response: GenerateCVResponse): CVData {
   return cvData;
 }
 
+export interface GeneratedCvStats {
+  totalGeneratedCvs: number;
+  totalUsers: number;
+}
+
 export async function generateCv({
   token,
   jobTitle,
@@ -86,5 +91,26 @@ export async function generateCv({
   return {
     data: cvData,
     response: data,
+  };
+}
+
+export async function fetchGeneratedCvStats(token: string): Promise<GeneratedCvStats> {
+  const res = await fetch(`${API_BASE_URL}/generated/stats`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    throw new Error(data?.message || 'Failed to load usage metrics.');
+  }
+
+  return {
+    totalGeneratedCvs: Number(data?.totalGeneratedCvs ?? 0),
+    totalUsers: Number(data?.totalUsers ?? 0),
   };
 }
