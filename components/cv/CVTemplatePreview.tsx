@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import HamburgerMenu from "../../components/HamburgerMenu";
-import
+
 
 export default function CVTemplatePreview() {
   return (
