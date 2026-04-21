@@ -9,18 +9,7 @@ export type RootStackParamList = {
   CheckEmail: { email: string };
   TemplateSelect: { data: any };
   CustomizeCV: { data: any };
-  CVPreview: {
-    data: any;
-    language: string;          // ← اضافه شد
-    theme: {                   // ← جایگزین primaryColor شد
-      headerColor:  string;
-      sidebarColor: string;
-      accentColor:  string;
-      sidebarText:  string;
-      mainBg:       string;
-      sectionColor: string;
-    };
-  };
+  CVPreview: { data: any; primaryColor: string };
 };
 
 export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;

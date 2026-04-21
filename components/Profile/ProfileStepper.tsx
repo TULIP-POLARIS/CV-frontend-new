@@ -4,22 +4,19 @@ import {
   StyleSheet, Alert,
 } from 'react-native';
 import { Ionicons as Icon } from '@expo/vector-icons';
+import type { ComponentProps } from 'react';
+import ProfileAvatarStep from './steps/ProfileAvatarStep';
 import PersonalInfoStep from './steps/PersonalInfoStep';
 import EducationStep, { EducationItem } from './steps/EducationStep';
 import WorkStep, { WorkItem } from './steps/WorkStep';
 import SkillsStep, { SkillItem } from './steps/SkillsStep';
 import LanguagesStep, { LanguageItem } from './steps/LanguagesStep';
 import { useAuth } from '../../context/AuthContext';
+import { useTranslation } from '../../hooks/useTranslation';
 
 const BASE_URL = 'https://cvapiappservice-dng8e8gmh0hvdbcr.francecentral-01.azurewebsites.net';
 
-const STEPS = [
-  { icon: 'person-outline',    label: 'Personal'  },
-  { icon: 'school-outline',    label: 'Education' },
-  { icon: 'briefcase-outline', label: 'Work'      },
-  { icon: 'star-outline',      label: 'Skills'    },
-  { icon: 'language-outline',  label: 'Languages' },
-];
+type IoniconsName = ComponentProps<typeof Icon>['name'];
 
 type Props = {
   currentStep: number;
@@ -28,7 +25,20 @@ type Props = {
 
 export default function ProfileStepper({ currentStep, onStepChange }: Props) {
   const { token } = useAuth();
+  const { t } = useTranslation();
+
+  const STEPS: { icon: IoniconsName; label: string }[] = [
+    { icon: 'camera-outline',    label: t('profileStepper.steps.avatar')    },
+    { icon: 'person-outline',    label: t('profileStepper.steps.personal')  },
+    { icon: 'school-outline',    label: t('profileStepper.steps.education') },
+    { icon: 'briefcase-outline', label: t('profileStepper.steps.work')      },
+    { icon: 'star-outline',      label: t('profileStepper.steps.skills')    },
+    { icon: 'language-outline',  label: t('profileStepper.steps.languages') },
+  ];
+
   const progressPercent = (currentStep / (STEPS.length - 1)) * 100;
+
+  const [avatarUri, setAvatarUri] = useState<string | null>(null);
 
   const [personalData, setPersonalData] = useState({
     firstName: '', lastName: '', dateOfBirth: '',
@@ -80,13 +90,11 @@ export default function ProfileStepper({ currentStep, onStepChange }: Props) {
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to save profile');
-      }
+      if (!response.ok) throw new Error(t('profileStepper.errorMessage'));
 
-      Alert.alert('Success', 'Profile saved successfully!');
+      Alert.alert(t('profileStepper.successTitle'), t('profileStepper.successMessage'));
     } catch (error: any) {
-      Alert.alert('Error', error.message || 'Something went wrong');
+      Alert.alert(t('profileStepper.errorTitle'), error.message || t('profileStepper.errorMessage'));
     } finally {
       setSaving(false);
     }
@@ -94,12 +102,18 @@ export default function ProfileStepper({ currentStep, onStepChange }: Props) {
 
   const renderStep = () => {
     switch (currentStep) {
-      case 0: return <PersonalInfoStep data={personalData} onChange={(field, value) =>
+      case 0: return (
+        <ProfileAvatarStep
+          initialUri={avatarUri ?? undefined}
+          onAvatarSelected={(uri) => setAvatarUri(uri)}
+        />
+      );
+      case 1: return <PersonalInfoStep data={personalData} onChange={(field, value) =>
         setPersonalData(prev => ({ ...prev, [field]: value }))} />;
-      case 1: return <EducationStep  data={educationData}  onChange={setEducationData} />;
-      case 2: return <WorkStep       data={workData}       onChange={setWorkData} />;
-      case 3: return <SkillsStep     data={skillsData}     onChange={setSkillsData} />;
-      case 4: return <LanguagesStep  data={languagesData}  onChange={setLanguagesData} />;
+      case 2: return <EducationStep  data={educationData}  onChange={setEducationData} />;
+      case 3: return <WorkStep       data={workData}       onChange={setWorkData} />;
+      case 4: return <SkillsStep     data={skillsData}     onChange={setSkillsData} />;
+      case 5: return <LanguagesStep  data={languagesData}  onChange={setLanguagesData} />;
       default: return null;
     }
   };
@@ -141,7 +155,9 @@ export default function ProfileStepper({ currentStep, onStepChange }: Props) {
       </View>
 
       <Text style={styles.stepCount}>
-        Step {currentStep + 1} of {STEPS.length}
+        {t('profileStepper.stepOf')
+          .replace('{current}', String(currentStep + 1))
+          .replace('{total}', String(STEPS.length))}
       </Text>
 
       <View style={styles.stepContent}>
@@ -155,7 +171,7 @@ export default function ProfileStepper({ currentStep, onStepChange }: Props) {
             onPress={() => onStepChange(currentStep - 1)}
           >
             <Icon name="arrow-back-outline" size={18} color="#3d6fd8" />
-            <Text style={styles.btnBackText}>Back</Text>
+            <Text style={styles.btnBackText}>{t('profileStepper.back')}</Text>
           </TouchableOpacity>
         )}
 
@@ -173,7 +189,11 @@ export default function ProfileStepper({ currentStep, onStepChange }: Props) {
           }}
         >
           <Text style={styles.btnNextText}>
-            {saving ? 'Saving...' : currentStep === STEPS.length - 1 ? 'Save' : 'Next'}
+            {saving
+              ? t('profileStepper.saving')
+              : currentStep === STEPS.length - 1
+                ? t('profileStepper.save')
+                : t('profileStepper.next')}
           </Text>
           <Icon
             name={currentStep === STEPS.length - 1 ? 'checkmark-outline' : 'arrow-forward-outline'}
@@ -194,14 +214,12 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     backgroundColor: '#ffffff',
   },
-
   stepsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 16,
   },
   stepItem: { alignItems: 'center', gap: 6, flex: 1 },
-
   circle: {
     width: 34, height: 34, borderRadius: 17,
     backgroundColor: '#f0f4ff', borderWidth: 2,
@@ -213,31 +231,25 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.35, shadowRadius: 6, elevation: 4,
   },
   circleCompleted: { backgroundColor: '#43a047', borderColor: '#43a047' },
-
   label:          { fontSize: 10, fontWeight: '500', color: '#90a4ae', textAlign: 'center' },
   labelActive:    { color: '#3d6fd8', fontWeight: '700' },
   labelCompleted: { color: '#43a047', fontWeight: '600' },
-
   progressBg: {
     height: 6, backgroundColor: '#dce8fb',
     borderRadius: 3, overflow: 'hidden', marginBottom: 8,
   },
   progressFill: { height: 6, backgroundColor: '#3d6fd8', borderRadius: 3 },
-
   stepCount: {
     fontSize: 12, color: '#90a4ae',
     textAlign: 'right', fontWeight: '500', marginBottom: 8,
   },
-
   stepContent: { marginTop: 8 },
-
   navRow: {
     flexDirection: 'row', alignItems: 'center',
     marginTop: 32, paddingTop: 16,
     borderTopWidth: 1, borderTopColor: '#f0f0f0',
   },
   navSpacer: { flex: 1 },
-
   btnBack: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
     paddingVertical: 12, paddingHorizontal: 20,
@@ -245,7 +257,6 @@ const styles = StyleSheet.create({
     borderColor: '#3d6fd8', backgroundColor: '#ffffff',
   },
   btnBackText: { fontSize: 14, fontWeight: '600', color: '#3d6fd8' },
-
   btnNext: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
     paddingVertical: 12, paddingHorizontal: 24,

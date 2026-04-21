@@ -27,18 +27,20 @@ const DEFAULT_THEME: CVTheme = {
 type Props = {
   data: CVData;
   theme?: CVTheme;
-  language?: string;
 };
 
-export default function CVTemplate({ data, theme = DEFAULT_THEME, language }: Props) {
+export default function CVTemplate({ data, theme = DEFAULT_THEME }: Props) {
   return (
     <ScrollView style={styles.wrapper}>
       <View style={[styles.container, { backgroundColor: theme.mainBg }]}>
+
         <HeaderSection data={data} theme={theme} />
+
         <View style={styles.body}>
           <LeftSidebar data={data} theme={theme} />
           <RightContent data={data} theme={theme} />
         </View>
+
       </View>
     </ScrollView>
   );

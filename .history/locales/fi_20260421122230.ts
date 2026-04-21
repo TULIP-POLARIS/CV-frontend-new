@@ -102,21 +102,6 @@ const fi = {
     successTitle: 'Valmis', successMessage: 'Profiili tallennettu!',
     errorTitle: 'Virhe', errorMessage: 'Jotain meni pieleen',
   },
-  customizeCV: {
-    pageTitle: "Valitse teema",
-    pageSubtitle: "Valitse tyyli, joka kuvastaa sinua",
-    selectedLabel: "Valittu:",
-    previewBtn: "Esikatsele CV",
-    previewBtnSub: "Teema:",
-    themes: {
-      ocean:         { name: "Merenharmaa",                  desc: "Selkeä ja itsevarma, sopii teknisiin tehtäviin" },
-      navyGold:      { name: "Tummansininen & Kulta",         desc: "Klassinen ja arvokas, ihanteellinen yrityksille" },
-      slateTeal:     { name: "Liuskekivi & Sinivihreä",       desc: "Moderni ja tekninen, täydellinen IT-alalle" },
-      charcoalCoral: { name: "Antrasiitti & Koralli",         desc: "Luova ja rohkea, sopii suunnittelijoille" },
-      forestSand:    { name: "Metsä & Hiekka",               desc: "Lämmin ja orgaaninen, ainutlaatuinen" },
-      plumBlush:     { name: "Luumu & Vaaleanpunainen",       desc: "Hienostunut ja tyylikäs, luoville aloille" },
-    },
-  },
 };
 
 export default fi;

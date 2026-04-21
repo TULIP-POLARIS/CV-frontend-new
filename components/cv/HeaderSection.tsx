@@ -1,17 +1,17 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { CVData } from "../../types/cv";
+import { CVTheme } from "./CVTemplate";
 
 type Props = {
   data: CVData;
-  primaryColor: string;
+  theme: CVTheme;
 };
 
-export default function HeaderSection({ data, primaryColor }: Props) {
+export default function HeaderSection({ data, theme }: Props) {
   return (
-    <View style={[styles.container, { backgroundColor: primaryColor }]}>
+    <View style={[styles.container, { backgroundColor: theme.headerColor }]}>
       <Image source={{ uri: data.image }} style={styles.avatar} />
-
       <View>
         <Text style={styles.name}>{data.name}</Text>
         <Text style={styles.title}>{data.title}</Text>
