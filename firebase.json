@@ -3,9 +3,14 @@
     "public": "dist",
     "ignore": [
       "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
+      "**/.*"
     ],
+    "headers": [{
+          "source": "**/*.@(ttf|otf|eot|svg|woff|woff2)",
+          "headers": [{
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"}]
+        }],
     "rewrites": [
       {
         "source": "**",
