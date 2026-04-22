@@ -53,15 +53,16 @@ function transformGeneratedCVToCVData(response: GenerateCVResponse): CVData {
   return cvData;
 }
 
+export interface DailyStat {
+  date: string;
+  generatedCvs: number;
+  users: number;
+}
+
 export interface GeneratedCvStats {
   totalGeneratedCvs: number;
   totalUsers: number;
-  date: string;
-  dailyStats: Array<{
-    date: string;
-    generatedCvs: number;
-    users: number;
-  }>;
+  dailyStats: DailyStat[];
 }
 
 export async function generateCv({
@@ -117,9 +118,13 @@ export async function fetchGeneratedCvStats(token: string): Promise<GeneratedCvS
   }
 
   return {
-   dailyStats: data.dailyStats || [],
-   totalGeneratedCvs: data.dailyStats.generatedCvs || 0,
-   totalUsers: data.dailyStats.users || 0,
-   date: data.dailyStats.date || '',
+    totalGeneratedCvs: Number(data?.totalGeneratedCvs ?? 0),
+    totalUsers: Number(data?.totalUsers ?? 0),
+    dailyStats: Array.isArray(data?.dailyStats) ? data.dailyStats.map((stat: any) => ({
+      date: stat.date,
+      generatedCvs: Number(stat.generatedCvs ?? 0),
+      users: Number(stat.users ?? 0),
+    })) : [],
   };
 }
+

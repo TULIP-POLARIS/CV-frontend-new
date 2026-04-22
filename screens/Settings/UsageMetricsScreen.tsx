@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View, Dimensions } from 'react-native';
 import { fetchGeneratedCvStats, GeneratedCvStats } from '../../services/cv.service';
 import { useAuth } from '../../context/AuthContext';
 import { LineChart } from 'react-native-chart-kit';
-import { Dimensions } from 'react-native';
+
+const { width } = Dimensions.get('window');
+
+type DailyStat = {
+  date: string;
+  generatedCvs: number;
+  users: number;
+};
 
 export default function UsageMetricsScreen() {
   const { token } = useAuth();
   const [stats, setStats] = useState<GeneratedCvStats | null>(null);
+  const [dailyStats, setDailyStats] = useState<DailyStat[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,6 +31,7 @@ export default function UsageMetricsScreen() {
         const data = await fetchGeneratedCvStats(token);
         console.log('Fetched stats:', data);
         setStats(data);
+        setDailyStats(data.dailyStats ?? []);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load metrics.');
       } finally {
@@ -32,9 +41,6 @@ export default function UsageMetricsScreen() {
 
     loadStats();
   }, [token]);
-
-  const dailyStats: { date: string; generatedCvs: number; users: number }[] =
-    (stats as any)?.dailyStats || [];
 
   const hasData = dailyStats.length > 0;
 
@@ -66,6 +72,10 @@ export default function UsageMetricsScreen() {
 
   const chartWidth = Dimensions.get('window').width - 80;
 
+  const lineLabels = dailyStats.map(d => d.date.slice(5));
+  const cvData = dailyStats.map(d => d.generatedCvs);
+  const userData = dailyStats.map(d => d.users);
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <Text style={styles.title}>Usage Metrics</Text>
@@ -84,6 +94,7 @@ export default function UsageMetricsScreen() {
         </View>
       ) : (
         <>
+          {/* Summary Cards */}
           <View style={styles.summaryRow}>
             <View style={styles.summaryCard}>
               <Text style={styles.summaryLabel}>Generated CVs</Text>
@@ -95,6 +106,7 @@ export default function UsageMetricsScreen() {
             </View>
           </View>
 
+          {/* Bar Overview */}
           <View style={styles.chartCard}>
             <Text style={styles.chartTitle}>Usage Overview</Text>
             {hasData ? (
@@ -119,6 +131,79 @@ export default function UsageMetricsScreen() {
               <Text style={styles.description}>No daily stats available to display.</Text>
             )}
           </View>
+
+          {/* Line Charts */}
+          {dailyStats.length > 0 && (
+            <View style={styles.chartCard}>
+
+              <Text style={styles.chartTitle}>Daily CVs Generated</Text>
+              <LineChart
+                data={{
+                  labels: lineLabels,
+                  datasets: [
+                    {
+                      data: cvData,
+                      color: () => '#4A90E2',
+                      strokeWidth: 2,
+                    },
+                  ],
+                  legend: ['Generated CVs'],
+                }}
+                width={width - 64}
+                height={220}
+                chartConfig={{
+                  backgroundColor: '#ffffff',
+                  backgroundGradientFrom: '#ffffff',
+                  backgroundGradientTo: '#ffffff',
+                  decimalPlaces: 0,
+                  color: (opacity = 1) => `rgba(74, 144, 226, ${opacity})`,
+                  labelColor: () => '#90a4ae',
+                  style: { borderRadius: 16 },
+                  propsForDots: {
+                    r: '5',
+                    strokeWidth: '2',
+                    stroke: '#3d6fd8',
+                  },
+                }}
+                bezier
+                style={{ borderRadius: 12, marginTop: 8 }}
+              />
+
+              <Text style={[styles.chartTitle, { marginTop: 28 }]}>Daily Users</Text>
+              <LineChart
+                data={{
+                  labels: lineLabels,
+                  datasets: [
+                    {
+                      data: userData,
+                      color: () => '#3d6fd8',
+                      strokeWidth: 2,
+                    },
+                  ],
+                  legend: ['Users'],
+                }}
+                width={width - 64}
+                height={220}
+                chartConfig={{
+                  backgroundColor: '#ffffff',
+                  backgroundGradientFrom: '#ffffff',
+                  backgroundGradientTo: '#ffffff',
+                  decimalPlaces: 0,
+                  color: (opacity = 1) => `rgba(61, 111, 216, ${opacity})`,
+                  labelColor: () => '#90a4ae',
+                  style: { borderRadius: 16 },
+                  propsForDots: {
+                    r: '5',
+                    strokeWidth: '2',
+                    stroke: '#4A90E2',
+                  },
+                }}
+                bezier
+                style={{ borderRadius: 12, marginTop: 8 }}
+              />
+
+            </View>
+          )}
         </>
       )}
     </ScrollView>
@@ -132,6 +217,7 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 20,
+    paddingBottom: 40,
   },
   title: {
     fontSize: 24,
@@ -195,6 +281,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 16,
     padding: 20,
+    marginBottom: 20,
     shadowColor: '#000',
     shadowOpacity: 0.05,
     shadowRadius: 10,
