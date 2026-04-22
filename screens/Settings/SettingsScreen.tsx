@@ -85,11 +85,12 @@ export default function SettingsScreen() {
         />
         <View style={styles.divider} />
         <SettingItem
-          label="Change Password"
-          onPress={() =>
-            Alert.alert('Coming Soon', 'Password change feature coming soon')
-          }
-        />
+  label="Change Password"
+  onPress={() => navigation.navigate('ResetPassword', { email: email ?? '' })}
+  rightElement={
+    <Icon name="chevron-forward-outline" size={16} color="#90a4ae" />
+  }
+/>
         <View style={styles.divider} />
         <SettingItem
           label={`Email: ${email ?? 'Not available'}`}
@@ -170,15 +171,17 @@ export default function SettingsScreen() {
       <SettingSection title="Privacy & Support">
         <SettingItem
           label="Privacy Policy"
-          onPress={() =>
-            Alert.alert('Privacy Policy', 'Privacy policy content here')
+          onPress={() => navigation.navigate('PrivacyPolicy')}
+          rightElement={
+            <Icon name="chevron-forward-outline" size={16} color="#90a4ae" />
           }
         />
         <View style={styles.divider} />
         <SettingItem
           label="Terms of Service"
-          onPress={() =>
-            Alert.alert('Terms of Service', 'Terms and conditions here')
+          onPress={() => navigation.navigate('TermsOfService')}
+          rightElement={
+            <Icon name="chevron-forward-outline" size={16} color="#90a4ae" />
           }
         />
         <View style={styles.divider} />
