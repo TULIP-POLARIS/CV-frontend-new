@@ -66,6 +66,9 @@ export const loadProfile = async (token: string) => {
 };
 
 
+// =====================
+// 📌 SAVE PERSONAL
+// =====================
 export const savePersonal = async (token: string, data: any) => {
   const res = await fetch(`${BASE_URL}/api/profile/personal`, {
     method: 'PUT',

@@ -362,4 +362,4 @@ const styles = StyleSheet.create({
   genderBtnActive: { backgroundColor: '#3d6fd8', borderColor: '#3d6fd8' },
   genderText: { fontSize: 13, fontWeight: '600', color: '#607d8b' },
   genderTextActive: { color: '#ffffff' },
-});
+});r

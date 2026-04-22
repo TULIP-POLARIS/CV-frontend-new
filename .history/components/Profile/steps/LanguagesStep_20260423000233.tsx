@@ -3,41 +3,41 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform } from 'r
 import { Ionicons as Icon } from '@expo/vector-icons';
 import { useTranslation } from '../../../hooks/useTranslation';
 
-export type SkillItem = {
+export type LanguageItem = {
   id: string;
-  name: string;
-  level: 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
+  language: string;
+  proficiency: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2' | 'Native';
 };
 
 type Props = {
-  data: SkillItem[];
-  onChange: (data: SkillItem[]) => void;
+  data: LanguageItem[];
+  onChange: (data: LanguageItem[]) => void;
   onDelete: (id: string) => void;
 };
 
-const LEVELS: SkillItem['level'][] = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
+const LEVELS: LanguageItem['proficiency'][] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Native'];
 
-const emptyItem = (): SkillItem => ({ id: '', name: '', level: 'Intermediate' });
+const emptyItem = (): LanguageItem => ({ id: '', language: '', proficiency: 'B2' });
 
-export default function SkillsStep({ data, onChange, onDelete }: Props) {
+export default function LanguagesStep({ data, onChange, onDelete }: Props) {
   const { t } = useTranslation();
 
-  const handleChange = (id: string, field: keyof SkillItem, value: any) =>
+  const handleChange = (id: string, field: keyof LanguageItem, value: any) =>
     onChange(data.map(item => item.id === id ? { ...item, [field]: value } : item));
 
   return (
     <View style={styles.container}>
       <View style={styles.sectionHeader}>
         <View style={styles.sectionIconWrapper}>
-          <Icon name="star-outline" size={18} color="#3d6fd8" />
+          <Icon name="language-outline" size={18} color="#3d6fd8" />
         </View>
-        <Text style={styles.sectionTitle}>{t('skills.title')}</Text>
+        <Text style={styles.sectionTitle}>{t('languages.title')}</Text>
       </View>
 
       {data.map((item, index) => (
         <View key={item.id || index} style={styles.card}>
           <View style={styles.cardHeader}>
-            <Text style={styles.cardTitle}>{t('skills.item')} {index + 1}</Text>
+            <Text style={styles.cardTitle}>{t('languages.item')} {index + 1}</Text>
             {data.length > 1 && (
               <TouchableOpacity onPress={() => onDelete(item.id)} style={styles.removeBtn}>
                 <Icon name="trash-outline" size={18} color="#e53935" />
@@ -45,24 +45,24 @@ export default function SkillsStep({ data, onChange, onDelete }: Props) {
             )}
           </View>
 
-          <Text style={styles.label}>{t('skills.name')}</Text>
+          <Text style={styles.label}>{t('languages.language')}</Text>
           <View style={styles.inputRow}>
-            <Icon name="star-outline" size={16} color="#90a4ae" style={styles.inputIcon} />
-            <TextInput style={styles.inputFlex} placeholder={t('skills.namePlaceholder')}
-              placeholderTextColor="#b0bec5" value={item.name}
-              onChangeText={v => handleChange(item.id, 'name', v)} autoCapitalize="words" />
+            <Icon name="language-outline" size={16} color="#90a4ae" style={styles.inputIcon} />
+            <TextInput style={styles.inputFlex} placeholder={t('languages.languagePlaceholder')}
+              placeholderTextColor="#b0bec5" value={item.language}
+              onChangeText={v => handleChange(item.id, 'language', v)} autoCapitalize="words" />
           </View>
 
-          <Text style={styles.label}>{t('skills.level')}</Text>
+          <Text style={styles.label}>{t('languages.proficiency')}</Text>
           <View style={styles.levelsRow}>
             {LEVELS.map(level => (
               <TouchableOpacity
                 key={level}
-                style={[styles.levelBtn, item.level === level && styles.levelBtnActive]}
-                onPress={() => handleChange(item.id, 'level', level)}
+                style={[styles.levelBtn, item.proficiency === level && styles.levelBtnActive]}
+                onPress={() => handleChange(item.id, 'proficiency', level)}
               >
-                <Text style={[styles.levelText, item.level === level && styles.levelTextActive]}>
-                  {t(`skills.levels.${level.toLowerCase()}`)}
+                <Text style={[styles.levelText, item.proficiency === level && styles.levelTextActive]}>
+                  {level}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -72,7 +72,7 @@ export default function SkillsStep({ data, onChange, onDelete }: Props) {
 
       <TouchableOpacity style={styles.addBtn} onPress={() => onChange([...data, emptyItem()])}>
         <Icon name="add-circle-outline" size={20} color="#3d6fd8" />
-        <Text style={styles.addBtnText}>{t('skills.addAnother')}</Text>
+        <Text style={styles.addBtnText}>{t('languages.addAnother')}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -99,4 +99,4 @@ const styles = StyleSheet.create({
   levelTextActive: { color: '#ffffff' },
   addBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, paddingVertical: 14, borderRadius: 12, borderWidth: 1.5, borderColor: '#3d6fd8', borderStyle: 'dashed', backgroundColor: '#f0f6ff', marginBottom: 8 },
   addBtnText: { fontSize: 14, fontWeight: '600', color: '#3d6fd8' },
-});
+});r

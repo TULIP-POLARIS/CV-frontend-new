@@ -19,11 +19,22 @@ const emptyWork = (): WorkItem => ({ id: '', jobTitle: '', company: '', location
 const emptySkill = (): SkillItem => ({ id: '', name: '', level: 'Intermediate' });
 const emptyLanguage = (): LanguageItem => ({ id: '', language: '', proficiency: 'B2' });
 
-const isPersonalFilled = (d: PersonalData) => !!(d.firstName || d.lastName || d.dateOfBirth || d.gender || d.nationality || d.countryOfResidence);
+const isPersonalFilled = (d: PersonalData) =>
+  !!(d.firstName || d.lastName || d.dateOfBirth || d.gender || d.nationality || d.countryOfResidence);
 const isEducationFilled = (items: EducationItem[]) => items.some(i => i.degree || i.fieldOfStudy || i.institution || i.startDate);
-const isWorkFilled = (items: WorkItem[]) => items.some(i => i.jobTitle || i.company || i.startDate);
-const isSkillFilled = (items: SkillItem[]) => items.some(i => i.name);
-const isLanguageFilled = (items: LanguageItem[]) => items.some(i => i.language);
+const isWorkFilled      = (items: WorkItem[])      => items.some(i => i.jobTitle || i.company || i.startDate);
+const isSkillFilled     = (items: SkillItem[])     => items.some(i => i.name);
+const isLanguageFilled  = (items: LanguageItem[])  => items.some(i => i.language);
+
+const getUserIdFromToken = (token: string): string | null => {
+  try {
+    const payload = token.split('.')[1];
+    const decoded = JSON.parse(atob(payload));
+    return decoded.sub || decoded.userId || decoded.nameid || decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] || null;
+  } catch {
+    return null;
+  }
+};
 
 export default function ProfileStepper({ currentStep, onStepChange }: Props) {
   const { token } = useAuth();
@@ -40,7 +51,7 @@ export default function ProfileStepper({ currentStep, onStepChange }: Props) {
   const [loading, setLoading]     = useState(true);
   const [saving, setSaving]       = useState(false);
   const [avatarUri, setAvatarUri] = useState<string | null>(null);
-  const [personalErrors]          = useState<string[]>([]);
+  const [personalErrors, setPersonalErrors] = useState<string[]>([]);
 
   const [personalData, setPersonalData] = useState<PersonalData>({
     firstName: '', lastName: '', dateOfBirth: '',
@@ -69,6 +80,8 @@ export default function ProfileStepper({ currentStep, onStepChange }: Props) {
 
       if (personalRes.ok) {
         const p = await personalRes.json();
+        console.log('personal response:', JSON.stringify(p));
+
         setPersonalData({
           firstName:          p.firstName          ?? '',
           lastName:           p.lastName           ?? '',
@@ -79,16 +92,21 @@ export default function ProfileStepper({ currentStep, onStepChange }: Props) {
           countryOfResidence: p.countryOfResidence ?? '',
           phoneNumber:        p.phoneNumber        ?? '',
         });
+
         if (p.profilePictureUrl) {
-          const fullUrl = p.profilePictureUrl.startsWith('http')
-            ? p.profilePictureUrl
-            : `${BASE_URL}${p.profilePictureUrl}`;
-          setAvatarUri(fullUrl + '?t=' + Date.now());
+          setAvatarUri(p.profilePictureUrl + '?t=' + Date.now());
+        } else if (p.hasProfilePicture && token) {
+          const userId = getUserIdFromToken(token);
+          if (userId) {
+            const picUrl = `${BASE_URL}/api/profile/personal/picture/user/${userId}?t=${Date.now()}`;
+            setAvatarUri(picUrl);
+          }
         }
       }
 
       if (educationRes.ok) {
         const education = await educationRes.json();
+        console.log('education response:', JSON.stringify(education));
         const mapped = Array.isArray(education) ? education.map((e: any) => ({
           id:           e.id           ?? '',
           degree:       e.degree       ?? '',
@@ -103,6 +121,7 @@ export default function ProfileStepper({ currentStep, onStepChange }: Props) {
 
       if (workRes.ok) {
         const work = await workRes.json();
+        console.log('work response:', JSON.stringify(work));
         const mapped = Array.isArray(work) ? work.map((w: any) => ({
           id:          w.id               ?? '',
           jobTitle:    w.jobTitle         ?? '',
@@ -118,6 +137,7 @@ export default function ProfileStepper({ currentStep, onStepChange }: Props) {
 
       if (skillsRes.ok) {
         const skills = await skillsRes.json();
+        console.log('skills response:', JSON.stringify(skills));
         const mapped = Array.isArray(skills) ? skills.map((s: any) => ({
           id:    s.id    ?? '',
           name:  s.name  ?? '',
@@ -128,6 +148,7 @@ export default function ProfileStepper({ currentStep, onStepChange }: Props) {
 
       if (languagesRes.ok) {
         const languages = await languagesRes.json();
+        console.log('languages response:', JSON.stringify(languages));
         const mapped = Array.isArray(languages) ? languages.map((l: any) => ({
           id:          l.id    ?? '',
           language:    l.name  ?? '',
@@ -152,12 +173,26 @@ export default function ProfileStepper({ currentStep, onStepChange }: Props) {
   const saveEducation = async () => {
     for (const item of educationData) {
       if (!item.degree && !item.institution) continue;
-      const body = { degree: item.degree, fieldOfStudy: item.fieldOfStudy, institution: item.institution, startDate: item.startDate, endDate: item.endDate, description: item.description };
+      const body = {
+        degree:       item.degree,
+        fieldOfStudy: item.fieldOfStudy,
+        institution:  item.institution,
+        startDate:    item.startDate,
+        endDate:      item.endDate,
+        description:  item.description,
+      };
       if (item.id) {
-        await fetch(`${BASE_URL}/api/profile/education/${item.id}`, { method: 'PUT', headers, body: JSON.stringify(body) });
+        await fetch(`${BASE_URL}/api/profile/education/${item.id}`, {
+          method: 'PUT', headers, body: JSON.stringify(body),
+        });
       } else {
-        const res = await fetch(`${BASE_URL}/api/profile/education`, { method: 'POST', headers, body: JSON.stringify(body) });
-        if (res.ok) { const created = await res.json(); if (created?.id) item.id = created.id; }
+        const res = await fetch(`${BASE_URL}/api/profile/education`, {
+          method: 'POST', headers, body: JSON.stringify(body),
+        });
+        if (res.ok) {
+          const created = await res.json();
+          if (created?.id) item.id = created.id;
+        }
       }
     }
   };
@@ -165,12 +200,27 @@ export default function ProfileStepper({ currentStep, onStepChange }: Props) {
   const saveWork = async () => {
     for (const item of workData) {
       if (!item.jobTitle && !item.company) continue;
-      const body = { jobTitle: item.jobTitle, company: item.company, location: item.location, startDate: item.startDate, endDate: item.endDate, currentlyWorking: item.isCurrent, description: item.description };
+      const body = {
+        jobTitle:         item.jobTitle,
+        company:          item.company,
+        location:         item.location,
+        startDate:        item.startDate,
+        endDate:          item.endDate,
+        currentlyWorking: item.isCurrent,
+        description:      item.description,
+      };
       if (item.id) {
-        await fetch(`${BASE_URL}/api/profile/work/${item.id}`, { method: 'PUT', headers, body: JSON.stringify(body) });
+        await fetch(`${BASE_URL}/api/profile/work/${item.id}`, {
+          method: 'PUT', headers, body: JSON.stringify(body),
+        });
       } else {
-        const res = await fetch(`${BASE_URL}/api/profile/work`, { method: 'POST', headers, body: JSON.stringify(body) });
-        if (res.ok) { const created = await res.json(); if (created?.id) item.id = created.id; }
+        const res = await fetch(`${BASE_URL}/api/profile/work`, {
+          method: 'POST', headers, body: JSON.stringify(body),
+        });
+        if (res.ok) {
+          const created = await res.json();
+          if (created?.id) item.id = created.id;
+        }
       }
     }
   };
@@ -180,10 +230,17 @@ export default function ProfileStepper({ currentStep, onStepChange }: Props) {
       if (!item.name) continue;
       const body = { name: item.name, level: item.level };
       if (item.id) {
-        await fetch(`${BASE_URL}/api/profile/skills/${item.id}`, { method: 'PUT', headers, body: JSON.stringify(body) });
+        await fetch(`${BASE_URL}/api/profile/skills/${item.id}`, {
+          method: 'PUT', headers, body: JSON.stringify(body),
+        });
       } else {
-        const res = await fetch(`${BASE_URL}/api/profile/skills`, { method: 'POST', headers, body: JSON.stringify(body) });
-        if (res.ok) { const created = await res.json(); if (created?.id) item.id = created.id; }
+        const res = await fetch(`${BASE_URL}/api/profile/skills`, {
+          method: 'POST', headers, body: JSON.stringify(body),
+        });
+        if (res.ok) {
+          const created = await res.json();
+          if (created?.id) item.id = created.id;
+        }
       }
     }
   };
@@ -193,61 +250,108 @@ export default function ProfileStepper({ currentStep, onStepChange }: Props) {
       if (!item.language) continue;
       const body = { name: item.language, level: item.proficiency };
       if (item.id) {
-        await fetch(`${BASE_URL}/api/profile/languages/${item.id}`, { method: 'PUT', headers, body: JSON.stringify(body) });
+        await fetch(`${BASE_URL}/api/profile/languages/${item.id}`, {
+          method: 'PUT', headers, body: JSON.stringify(body),
+        });
       } else {
-        const res = await fetch(`${BASE_URL}/api/profile/languages`, { method: 'POST', headers, body: JSON.stringify(body) });
-        if (res.ok) { const created = await res.json(); if (created?.id) item.id = created.id; }
+        const res = await fetch(`${BASE_URL}/api/profile/languages`, {
+          method: 'POST', headers, body: JSON.stringify(body),
+        });
+        if (res.ok) {
+          const created = await res.json();
+          if (created?.id) item.id = created.id;
+        }
       }
     }
   };
 
   const deleteEducation = async (id: string) => {
     if (id) await fetch(`${BASE_URL}/api/profile/education/${id}`, { method: 'DELETE', headers });
-    setEducationData(prev => { const next = prev.filter(i => i.id !== id); return next.length ? next : [emptyEducation()]; });
+    setEducationData(prev => {
+      const next = prev.filter(i => i.id !== id);
+      return next.length ? next : [emptyEducation()];
+    });
   };
 
   const deleteWork = async (id: string) => {
     if (id) await fetch(`${BASE_URL}/api/profile/work/${id}`, { method: 'DELETE', headers });
-    setWorkData(prev => { const next = prev.filter(i => i.id !== id); return next.length ? next : [emptyWork()]; });
+    setWorkData(prev => {
+      const next = prev.filter(i => i.id !== id);
+      return next.length ? next : [emptyWork()];
+    });
   };
 
   const deleteSkill = async (id: string) => {
     if (id) await fetch(`${BASE_URL}/api/profile/skills/${id}`, { method: 'DELETE', headers });
-    setSkillsData(prev => { const next = prev.filter(i => i.id !== id); return next.length ? next : [emptySkill()]; });
+    setSkillsData(prev => {
+      const next = prev.filter(i => i.id !== id);
+      return next.length ? next : [emptySkill()];
+    });
   };
 
   const deleteLanguage = async (id: string) => {
     if (id) await fetch(`${BASE_URL}/api/profile/languages/${id}`, { method: 'DELETE', headers });
-    setLanguagesData(prev => { const next = prev.filter(i => i.id !== id); return next.length ? next : [emptyLanguage()]; });
+    setLanguagesData(prev => {
+      const next = prev.filter(i => i.id !== id);
+      return next.length ? next : [emptyLanguage()];
+    });
   };
 
   const handleNext = async () => {
     if (currentStep === 0) {
-      if (isPersonalFilled(personalData)) { setSaving(true); try { await savePersonal(); } finally { setSaving(false); } }
-      onStepChange(1); return;
+      if (isPersonalFilled(personalData)) {
+        setSaving(true);
+        try { await savePersonal(); } finally { setSaving(false); }
+      }
+      onStepChange(1);
+      return;
     }
+
     if (currentStep === 1) {
-      if (isEducationFilled(educationData)) { setSaving(true); try { await saveEducation(); } finally { setSaving(false); } }
-      onStepChange(2); return;
+      if (isEducationFilled(educationData)) {
+        setSaving(true);
+        try { await saveEducation(); } finally { setSaving(false); }
+      }
+      onStepChange(2);
+      return;
     }
+
     if (currentStep === 2) {
-      if (isWorkFilled(workData)) { setSaving(true); try { await saveWork(); } finally { setSaving(false); } }
-      onStepChange(3); return;
+      if (isWorkFilled(workData)) {
+        setSaving(true);
+        try { await saveWork(); } finally { setSaving(false); }
+      }
+      onStepChange(3);
+      return;
     }
+
     if (currentStep === 3) {
-      if (isSkillFilled(skillsData)) { setSaving(true); try { await saveSkills(); } finally { setSaving(false); } }
-      onStepChange(4); return;
+      if (isSkillFilled(skillsData)) {
+        setSaving(true);
+        try { await saveSkills(); } finally { setSaving(false); }
+      }
+      onStepChange(4);
+      return;
     }
+
     if (currentStep === 4) {
-      if (isLanguageFilled(languagesData)) { setSaving(true); try { await saveLanguages(); } catch { } finally { setSaving(false); } }
-      Alert.alert(t('profileStepper.successTitle'), t('profileStepper.successMessage')); return;
+      if (isLanguageFilled(languagesData)) {
+        setSaving(true);
+        try { await saveLanguages(); } catch { } finally { setSaving(false); }
+      }
+      Alert.alert(t('profileStepper.successTitle'), t('profileStepper.successMessage'));
+      return;
     }
   };
 
   const progressPercent = (currentStep / (STEPS.length - 1)) * 100;
 
   if (loading) {
-    return <View style={styles.loadingBox}><ActivityIndicator size="large" color="#3d6fd8" /></View>;
+    return (
+      <View style={styles.loadingBox}>
+        <ActivityIndicator size="large" color="#3d6fd8" />
+      </View>
+    );
   }
 
   const renderStep = () => {
@@ -255,7 +359,10 @@ export default function ProfileStepper({ currentStep, onStepChange }: Props) {
       case 0: return (
         <PersonalInfoStep
           data={personalData}
-          onChange={(field, value) => setPersonalData(prev => ({ ...prev, [field]: value }))}
+          onChange={(field, value) => {
+            setPersonalData(prev => ({ ...prev, [field]: value }));
+            setPersonalErrors(prev => prev.filter(e => e !== field));
+          }}
           avatarUri={avatarUri}
           onAvatarChange={setAvatarUri}
           errors={personalErrors}
@@ -278,7 +385,9 @@ export default function ProfileStepper({ currentStep, onStepChange }: Props) {
           return (
             <View key={index} style={styles.stepItem}>
               <View style={[styles.circle, isCompleted && styles.circleCompleted, isActive && styles.circleActive]}>
-                {isCompleted ? <Icon name="checkmark" size={14} color="#fff" /> : <Icon name={step.icon} size={14} color={isActive ? '#fff' : '#90a4ae'} />}
+                {isCompleted
+                  ? <Icon name="checkmark" size={14} color="#fff" />
+                  : <Icon name={step.icon} size={14} color={isActive ? '#fff' : '#90a4ae'} />}
               </View>
               <Text style={[styles.label, isActive && styles.labelActive, isCompleted && styles.labelCompleted]}>
                 {step.label}
@@ -293,7 +402,9 @@ export default function ProfileStepper({ currentStep, onStepChange }: Props) {
       </View>
 
       <Text style={styles.stepCount}>
-        {t('profileStepper.stepOf').replace('{current}', String(currentStep + 1)).replace('{total}', String(STEPS.length))}
+        {t('profileStepper.stepOf')
+          .replace('{current}', String(currentStep + 1))
+          .replace('{total}', String(STEPS.length))}
       </Text>
 
       <View style={styles.stepContent}>{renderStep()}</View>
@@ -306,11 +417,22 @@ export default function ProfileStepper({ currentStep, onStepChange }: Props) {
           </TouchableOpacity>
         )}
         <View style={styles.navSpacer} />
-        <TouchableOpacity style={[styles.btnNext, saving && styles.btnDisabled]} disabled={saving} onPress={handleNext}>
+        <TouchableOpacity
+          style={[styles.btnNext, saving && styles.btnDisabled]}
+          disabled={saving}
+          onPress={handleNext}
+        >
           <Text style={styles.btnNextText}>
-            {saving ? t('profileStepper.saving') : currentStep === STEPS.length - 1 ? t('profileStepper.save') : t('profileStepper.next')}
+            {saving
+              ? t('profileStepper.saving')
+              : currentStep === STEPS.length - 1
+                ? t('profileStepper.save')
+                : t('profileStepper.next')}
           </Text>
-          <Icon name={currentStep === STEPS.length - 1 ? 'checkmark-outline' : 'arrow-forward-outline'} size={18} color="#fff" />
+          <Icon
+            name={currentStep === STEPS.length - 1 ? 'checkmark-outline' : 'arrow-forward-outline'}
+            size={18} color="#fff"
+          />
         </TouchableOpacity>
       </View>
     </View>
@@ -322,7 +444,11 @@ const styles = StyleSheet.create({
   loadingBox:   { flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 80 },
   stepsRow:     { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 },
   stepItem:     { alignItems: 'center', gap: 6, flex: 1 },
-  circle:       { width: 34, height: 34, borderRadius: 17, backgroundColor: '#f0f4ff', borderWidth: 2, borderColor: '#dce8fb', justifyContent: 'center', alignItems: 'center' },
+  circle: {
+    width: 34, height: 34, borderRadius: 17,
+    backgroundColor: '#f0f4ff', borderWidth: 2, borderColor: '#dce8fb',
+    justifyContent: 'center', alignItems: 'center',
+  },
   circleActive:    { backgroundColor: '#3d6fd8', borderColor: '#3d6fd8', shadowColor: '#3d6fd8', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.35, shadowRadius: 6, elevation: 4 },
   circleCompleted: { backgroundColor: '#43a047', borderColor: '#43a047' },
   label:           { fontSize: 10, fontWeight: '500', color: '#90a4ae', textAlign: 'center' },
