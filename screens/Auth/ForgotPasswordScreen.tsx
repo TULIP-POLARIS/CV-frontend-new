@@ -60,11 +60,18 @@ export default function ForgotPasswordScreen({ navigation }: Props) {
         ? await response.json()
         : await response.text();
 
-      if (!response.ok) {
-        throw new Error(typeof data === 'string' ? data : data.message || t('forgotPassword.somethingWentWrong'));
-      }
+      if (response.status === 404) {
+  setEmailError('This email does not exist. Please enter a correct email.');
+  return;
+}
 
-      navigation.navigate('CheckEmail', { email });
+if (!response.ok) {
+  throw new Error(typeof data === 'string' ? data : data.message || t('forgotPassword.somethingWentWrong'));
+}
+
+// ✅ Email found → go to Reset Password
+navigation.navigate('ResetPassword', { email });
+
     } catch (error: any) {
       setEmailError(error.message || t('forgotPassword.somethingWentWrong'));
     } finally {

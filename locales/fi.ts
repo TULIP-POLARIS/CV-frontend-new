@@ -47,7 +47,7 @@ const fi = {
     email: 'Sähköposti',
     emailPlaceholder: 'Kirjoita sähköpostiosoitteesi',
     emailError: 'Kirjoita kelvollinen sähköpostiosoite',
-    sendButton: 'Lähetä palautuslinkki',
+    sendButton: 'Jatka',
     sending: 'Lähetetään...',
     backToLogin: 'Takaisin kirjautumiseen',
     somethingWentWrong: 'Jotain meni pieleen. Yritä uudelleen.',

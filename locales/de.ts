@@ -48,7 +48,7 @@ const de = {
     email: "E-Mail",
     emailPlaceholder: "E-Mail eingeben",
     emailError: "Gib eine gültige E-Mail-Adresse ein",
-    sendButton: "Link senden",
+    sendButton: "Weiter",
     sending: "Wird gesendet...",
     backToLogin: "Zurück zur Anmeldung",
     somethingWentWrong: "Etwas ist schiefgelaufen. Bitte versuche es erneut.",

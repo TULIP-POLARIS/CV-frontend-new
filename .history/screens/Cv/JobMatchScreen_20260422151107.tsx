@@ -8,10 +8,12 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../types/navigation';
-
-type Props = NativeStackScreenProps<RootStackParamList, 'JobMatch'>;
+import { RouteProp } from '@react-navigation/native';
+type RootStackParamList = {
+  JobMatch: {
+    userId: string;
+  };
+};
 
 type ComparisonItem = {
   id: string;
@@ -28,8 +30,8 @@ type ComparisonItem = {
   };
 };
 
-export default function JobMatchScreen({ route }: Props) {
-  const userId = route.params.userId;
+export default function JobMatchScreen({ route }) {
+  const userId = route.params?.userId;
 
   const [data, setData] = useState<ComparisonItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -88,17 +90,16 @@ export default function JobMatchScreen({ route }: Props) {
   return (
     <View style={styles.container}>
 
-      {/* HEADER */}
+      {/* LIST */}
       <Text style={styles.header}>Your Job Matches</Text>
 
-      {/* LIST */}
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
       />
 
-      {/* DETAIL */}
+      {/* DETAIL MODAL SIMPLE */}
       {selected && (
         <View style={styles.detailBox}>
           <Text style={styles.detailTitle}>
