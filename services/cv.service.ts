@@ -44,7 +44,7 @@ function transformGeneratedCVToCVData(response: GenerateCVResponse): CVData {
     })) : [],
     contact: {
       phone: sections.profile?.phoneNumber || "",
-      email: sections.profile?.email || "", // Check if available in profile
+      email: sections.profile?.email || "", 
       address: sections.profile?.address || "",
       linkedin: sections.profile?.linkedin || "",
     },

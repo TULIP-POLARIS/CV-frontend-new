@@ -1,0 +1,55 @@
+{
+  "expo": {
+    "name": "cv-checker",
+    "slug": "cv-checker",
+    "version": "1.0.0",
+    "sdkVersion": "54.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "scheme": "cv-checker",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.cvchecker"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "package": "com.anonymous.cvchecker",
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ],
+      "expo-web-browser",
+<<<<<<< HEAD
+      "@react-native-community/datetimepicker"
+=======
+      "expo-font"
+>>>>>>> 050a4bb3f26a0ed21106c112b008a2cb220fe1ee
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "d4cd252c-a287-446b-89dd-101290b9195b"
+      }
+    }
+  }
+}

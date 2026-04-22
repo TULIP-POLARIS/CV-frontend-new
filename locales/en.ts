@@ -159,6 +159,74 @@ const en = {
       plumBlush:     { name: "Plum & Blush",     desc: "Refined and elegant, great for creative fields" },
     },
   },
+  personalInfo: {
+    title: 'Personal Information',
+    firstName: 'First Name', firstNamePlaceholder: 'John',
+    lastName: 'Last Name', lastNamePlaceholder: 'Doe',
+    dateOfBirth: 'Date of Birth',
+    gender: 'Gender', male: 'Male', female: 'Female', other: 'Other',
+    nationality: 'Nationality', nationalityPlaceholder: 'e.g. Finnish',
+    address: 'Address', addressPlaceholder: 'Street, City',
+    countryOfResidence: 'Country of Residence', countryPlaceholder: 'e.g. Finland',
+    phoneNumber: 'Phone Number', phonePlaceholder: '+358 40 123 4567',
+    gallery: 'Gallery', camera: 'Camera',
+    permissionTitle: 'Permission Required',
+    permissionMessage: 'Please allow access to your photo library.',
+    cameraPermissionMessage: 'Please allow access to your camera.',
+    uploadError: 'Upload Failed', uploadErrorMessage: 'Could not upload photo. Please try again.',
+  },
+  skills: {
+    title: 'Skills', item: 'Skill',
+    name: 'Skill Name', namePlaceholder: 'e.g. React Native',
+    level: 'Level',
+    levels: { beginner: 'Beginner', intermediate: 'Intermediate', advanced: 'Advanced', expert: 'Expert' },
+    addAnother: 'Add Another Skill',
+  },
+  languages: {
+    title: 'Languages', item: 'Language',
+    language: 'Language', languagePlaceholder: 'e.g. English',
+    proficiency: 'Proficiency Level',
+    addAnother: 'Add Another Language',
+  },
+  "education": {
+    "title": "Education",
+    "item": "Education",
+    "degree": "Degree",
+    "degreePlaceholder": "e.g. Bachelor's, Master's",
+    "fieldOfStudy": "Field of Study",
+    "fieldPlaceholder": "e.g. Computer Science",
+    "institution": "Institution",
+    "institutionPlaceholder": "e.g. University of Helsinki",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "description": "Description",
+    "descriptionPlaceholder": "Describe your studies, achievements, etc.",
+    "addAnother": "Add another education"
+  },
+  work: {
+    title: "Work Experience",
+    item: "Work Experience",
+
+    jobTitle: "Job Title",
+    jobTitlePlaceholder: "e.g. Frontend Developer",
+
+    company: "Company",
+    companyPlaceholder: "e.g. Google",
+
+    location: "Location",
+    locationPlaceholder: "e.g. Amsterdam, Netherlands",
+
+    startDate: "Start Date",
+    endDate: "End Date",
+    present: "Present",
+
+    currentlyWorking: "I am currently working here",
+
+    description: "Description",
+    descriptionPlaceholder: "Describe your role, responsibilities, and achievements",
+
+    addAnother: "Add another work experience",
+  }
 };
 
 export default en;

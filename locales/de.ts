@@ -159,6 +159,75 @@ const de = {
       plumBlush:     { name: "Pflaume & Rosa",   desc: "Verfeinert und elegant, für kreative Berufe" },
     },
   },
+  personalInfo: {
+    title: 'Persönliche Informationen',
+    firstName: 'Vorname', firstNamePlaceholder: 'Max',
+    lastName: 'Nachname', lastNamePlaceholder: 'Mustermann',
+    dateOfBirth: 'Geburtsdatum',
+    gender: 'Geschlecht', male: 'Männlich', female: 'Weiblich', other: 'Divers',
+    nationality: 'Nationalität', nationalityPlaceholder: 'z.B. Finnisch',
+    address: 'Adresse', addressPlaceholder: 'Straße, Stadt',
+    countryOfResidence: 'Wohnsitzland', countryPlaceholder: 'z.B. Finnland',
+    phoneNumber: 'Telefonnummer', phonePlaceholder: '+358 40 123 4567',
+    gallery: 'Galerie', camera: 'Kamera',
+    permissionTitle: 'Berechtigung erforderlich',
+    permissionMessage: 'Bitte erlaube den Zugriff auf deine Fotobibliothek.',
+    cameraPermissionMessage: 'Bitte erlaube den Zugriff auf deine Kamera.',
+    uploadError: 'Hochladen fehlgeschlagen', uploadErrorMessage: 'Foto konnte nicht hochgeladen werden.',
+  },
+  skills: {
+    title: 'Fähigkeiten', item: 'Fähigkeit',
+    name: 'Name der Fähigkeit', namePlaceholder: 'z.B. React Native',
+    level: 'Niveau',
+    levels: { beginner: 'Anfänger', intermediate: 'Mittelstufe', advanced: 'Fortgeschritten', expert: 'Experte' },
+    addAnother: 'Weitere Fähigkeit hinzufügen',
+  },
+  languages: {
+    title: 'Sprachen', item: 'Sprache',
+    language: 'Sprache', languagePlaceholder: 'z.B. Englisch',
+    proficiency: 'Sprachniveau',
+    addAnother: 'Weitere Sprache hinzufügen',
+  },
+
+  "education": {
+    "title": "Ausbildung",
+    "item": "Ausbildung",
+    "degree": "Abschluss",
+    "degreePlaceholder": "z. B. Bachelor, Master",
+    "fieldOfStudy": "Studienrichtung",
+    "fieldPlaceholder": "z. B. Informatik",
+    "institution": "Institution",
+    "institutionPlaceholder": "z. B. Universität Berlin",
+    "startDate": "Startdatum",
+    "endDate": "Enddatum",
+    "description": "Beschreibung",
+    "descriptionPlaceholder": "Beschreibe dein Studium, Erfolge usw.",
+    "addAnother": "Weitere Ausbildung hinzufügen"
+  },
+  work: {
+    title: "Berufserfahrung",
+    item: "Berufserfahrung",
+
+    jobTitle: "Berufsbezeichnung",
+    jobTitlePlaceholder: "z. B. Frontend-Entwickler",
+
+    company: "Unternehmen",
+    companyPlaceholder: "z. B. Google",
+
+    location: "Standort",
+    locationPlaceholder: "z. B. Amsterdam, Niederlande",
+
+    startDate: "Startdatum",
+    endDate: "Enddatum",
+    present: "Gegenwärtig",
+
+    currentlyWorking: "Ich arbeite derzeit hier",
+
+    description: "Beschreibung",
+    descriptionPlaceholder: "Beschreibe deine Aufgaben, Verantwortlichkeiten und Erfolge",
+
+    addAnother: "Weitere Berufserfahrung hinzufügen",
+  }
 };
 
 export default de;

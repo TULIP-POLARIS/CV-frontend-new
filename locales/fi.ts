@@ -117,6 +117,74 @@ const fi = {
       plumBlush:     { name: "Luumu & Vaaleanpunainen",       desc: "Hienostunut ja tyylikäs, luoville aloille" },
     },
   },
+  personalInfo: {
+    title: 'Henkilötiedot',
+    firstName: 'Etunimi', firstNamePlaceholder: 'Matti',
+    lastName: 'Sukunimi', lastNamePlaceholder: 'Virtanen',
+    dateOfBirth: 'Syntymäaika',
+    gender: 'Sukupuoli', male: 'Mies', female: 'Nainen', other: 'Muu',
+    nationality: 'Kansallisuus', nationalityPlaceholder: 'esim. Suomalainen',
+    address: 'Osoite', addressPlaceholder: 'Katu, Kaupunki',
+    countryOfResidence: 'Asuinmaa', countryPlaceholder: 'esim. Suomi',
+    phoneNumber: 'Puhelinnumero', phonePlaceholder: '+358 40 123 4567',
+    gallery: 'Galleria', camera: 'Kamera',
+    permissionTitle: 'Lupa vaaditaan',
+    permissionMessage: 'Anna lupa käyttää kuvakirjastoasi.',
+    cameraPermissionMessage: 'Anna lupa käyttää kameraasi.',
+    uploadError: 'Lataus epäonnistui', uploadErrorMessage: 'Kuvan lataus epäonnistui. Yritä uudelleen.',
+  },
+  skills: {
+    title: 'Taidot', item: 'Taito',
+    name: 'Taidon nimi', namePlaceholder: 'esim. React Native',
+    level: 'Taso',
+    levels: { beginner: 'Aloittelija', intermediate: 'Keskitaso', advanced: 'Edistynyt', expert: 'Asiantuntija' },
+    addAnother: 'Lisää toinen taito',
+  },
+  languages: {
+    title: 'Kielet', item: 'Kieli',
+    language: 'Kieli', languagePlaceholder: 'esim. Englanti',
+    proficiency: 'Kielitaitotaso',
+    addAnother: 'Lisää toinen kieli',
+  },
+  "education": {
+    "title": "Koulutus",
+    "item": "Koulutus",
+    "degree": "Tutkinto",
+    "degreePlaceholder": "esim. Kandidaatti, Maisteri",
+    "fieldOfStudy": "Opintosuunta",
+    "fieldPlaceholder": "esim. Tietojenkäsittelytiede",
+    "institution": "Oppilaitos",
+    "institutionPlaceholder": "esim. Helsingin yliopisto",
+    "startDate": "Aloituspäivä",
+    "endDate": "Lopetuspäivä",
+    "description": "Kuvaus",
+    "descriptionPlaceholder": "Kuvaile opintojasi, saavutuksia jne.",
+    "addAnother": "Lisää toinen koulutus"
+  },
+  work: {
+    title: "Työkokemus",
+    item: "Työkokemus",
+
+    jobTitle: "Työnimike",
+    jobTitlePlaceholder: "esim. Frontend-kehittäjä",
+
+    company: "Yritys",
+    companyPlaceholder: "esim. Google",
+
+    location: "Sijainti",
+    locationPlaceholder: "esim. Amsterdam, Alankomaat",
+
+    startDate: "Aloituspäivä",
+    endDate: "Päättymispäivä",
+    present: "Tällä hetkellä",
+
+    currentlyWorking: "Työskentelen täällä tällä hetkellä",
+
+    description: "Kuvaus",
+    descriptionPlaceholder: "Kuvaile tehtäviäsi, vastuitasi ja saavutuksiasi",
+
+    addAnother: "Lisää toinen työkokemus",
+  }
 };
 
 export default fi;
