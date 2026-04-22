@@ -91,6 +91,7 @@ export async function generateCv({
   if (!res.ok) {
     throw new Error(data?.message || "Error generating the CV.");
   }
+  
 
   // Transform the response to CVData format
   const cvData = transformGeneratedCVToCVData(data);
