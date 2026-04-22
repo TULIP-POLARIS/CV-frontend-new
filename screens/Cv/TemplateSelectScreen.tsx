@@ -37,11 +37,11 @@ export default function TemplateSelectScreen({ navigation, route }: any) {
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#F5F6FA",
-  },
-
+  flex: 1,
+  padding: 20,
+  paddingTop: 60,
+  backgroundColor: "#F5F6FA",
+},
   title: {
     fontSize: 22,
     fontWeight: "bold",
