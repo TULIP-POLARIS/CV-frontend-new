@@ -23,7 +23,6 @@ export default function StackNavigator() {
       <Stack.Screen name="CustomizeCV" component={CustomizeCVScreen} />
       <Stack.Screen name="CVPreview" component={CVPreviewScreen} />
       <Stack.Screen name="UsageMetrics" component={UsageMetricsScreen} />
-      <Stack.Screen name="JobMatch" component={JobMatchScreen} />
     </Stack.Navigator>
   );
 }

@@ -9,7 +9,7 @@ import TemplateSelectScreen from '../screens/Cv/TemplateSelectScreen';
 import CustomizeCVScreen from '../screens/Cv/CustomizeCVScreen';
 import CVPreviewScreen from '../screens/Cv/CVPreviewScreen';
 import UsageMetricsScreen from '../screens/Settings/UsageMetricsScreen';
-import JobMatchScreen from '../screens/Cv/JobMatchScreen';
+import JobMatchScreen from '../screens/JobMatchScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -23,7 +23,6 @@ export default function StackNavigator() {
       <Stack.Screen name="CustomizeCV" component={CustomizeCVScreen} />
       <Stack.Screen name="CVPreview" component={CVPreviewScreen} />
       <Stack.Screen name="UsageMetrics" component={UsageMetricsScreen} />
-      <Stack.Screen name="JobMatch" component={JobMatchScreen} />
     </Stack.Navigator>
   );
 }

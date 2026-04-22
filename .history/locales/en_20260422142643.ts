@@ -91,7 +91,7 @@ const en = {
     errorPickFile: "Failed to pick file. Please try again.",
     errorUpload: "Upload failed. Please try again.",
     errorEmptyBackground: "Please write something about yourself.",
-    matchJob: "Check Job Fit"
+    "matchJob": "Check Job Fit"
   },
   profile: {
     title: "My Profile",

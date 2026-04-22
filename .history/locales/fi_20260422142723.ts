@@ -90,7 +90,7 @@ const fi = {
     errorPickFile: 'Tiedoston valinta epäonnistui. Yritä uudelleen.',
     errorUpload: 'Lataus epäonnistui. Yritä uudelleen.',
     errorEmptyBackground: 'Kirjoita jotain itsestäsi.',
-    matchJob: 'Tarkista työn sopivuus'
+    
   },
   profile: {
     title: 'Oma profiili',

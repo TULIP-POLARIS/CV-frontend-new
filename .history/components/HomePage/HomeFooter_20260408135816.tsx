@@ -51,20 +51,6 @@ export default function HomeFooter({ onReadPrivacy, data }: Props) {
         <Icon name="sparkles-outline" size={18} color="#ffffff" style={styles.icon} />
         <Text style={styles.btnGenerateText}>{t('home.generateButton')}</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.btnMatch}
-        onPress={() => {
-          if (allowStorage) {
-            navigation.navigate('JobMatch', { data: data || {} });
-          }
-        }}
-        disabled={!allowStorage}
-      >
-        <Icon name="analytics-outline" size={16} color="#ffffff" style={styles.icon} />
-        <Text style={styles.btnMatchText}>
-          {t('home.matchJob')} 
-        </Text>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -81,30 +67,4 @@ const styles = StyleSheet.create({
   btnGenerate: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: '#3d6fd8', borderRadius: 25, paddingVertical: 15, marginHorizontal: 24, shadowColor: '#3d6fd8', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 },
   btnDisabled: { backgroundColor: '#90a4ae', shadowOpacity: 0, elevation: 0 },
   btnGenerateText: { fontSize: 15, fontWeight: '700', color: '#ffffff', letterSpacing: 0.5 },
-  btnMatch: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 13,
-    paddingLeft: 32,
-    paddingRight: 24,
-    borderTopLeftRadius: BORDER_RADIUS,
-    borderBottomLeftRadius: BORDER_RADIUS,
-    borderTopRightRadius: 0,
-    borderBottomRightRadius: 0,
-    backgroundColor: '#3d6fd8',
-    width: width * 0.58,
-    alignSelf: 'flex-end', 
-    shadowColor: '#3d6fd8',
-    shadowOffset: { width: -2, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 3,
-  },
-
-  btnMatchText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#ffffff',
-    flex: 1,
-  },
 });

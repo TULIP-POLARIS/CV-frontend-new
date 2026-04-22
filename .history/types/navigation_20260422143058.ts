@@ -23,7 +23,6 @@ export type RootStackParamList = {
   };
 
   JobMatch: { data: any };
-  UsageMetrics: undefined;
 };
 
 export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;

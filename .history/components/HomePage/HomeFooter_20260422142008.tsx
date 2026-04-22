@@ -62,7 +62,7 @@ export default function HomeFooter({ onReadPrivacy, data }: Props) {
       >
         <Icon name="analytics-outline" size={16} color="#ffffff" style={styles.icon} />
         <Text style={styles.btnMatchText}>
-          {t('home.matchJob')} 
+          {t('home.matchJob')} {/* مثلا "Check Job Fit" */}
         </Text>
       </TouchableOpacity>
     </View>
@@ -91,10 +91,10 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: BORDER_RADIUS,
     borderTopRightRadius: 0,
     borderBottomRightRadius: 0,
-    backgroundColor: '#3d6fd8',
+    backgroundColor: '#1a3a6b\,
     width: width * 0.58,
     alignSelf: 'flex-end', 
-    shadowColor: '#3d6fd8',
+    shadowColor: '#5c7cfa',
     shadowOffset: { width: -2, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 6,

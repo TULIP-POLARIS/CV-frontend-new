@@ -91,7 +91,7 @@ const de = {
     errorPickFile: "Datei konnte nicht ausgewählt werden. Bitte versuche es erneut.",
     errorUpload: "Hochladen fehlgeschlagen. Bitte versuche es erneut.",
     errorEmptyBackground: "Bitte schreibe etwas über dich.",
-    matchJob: "Passende Stellen prüfen"
+      matchJob: "Passende Stellen prüfen"
   },
   profile: {
     title: "Mein Profil",

@@ -62,7 +62,7 @@ export default function HomeFooter({ onReadPrivacy, data }: Props) {
       >
         <Icon name="analytics-outline" size={16} color="#ffffff" style={styles.icon} />
         <Text style={styles.btnMatchText}>
-          {t('home.matchJob')} 
+          {t('home.matchJob')} {/* مثلا "Check Job Fit" */}
         </Text>
       </TouchableOpacity>
     </View>
@@ -82,29 +82,29 @@ const styles = StyleSheet.create({
   btnDisabled: { backgroundColor: '#90a4ae', shadowOpacity: 0, elevation: 0 },
   btnGenerateText: { fontSize: 15, fontWeight: '700', color: '#ffffff', letterSpacing: 0.5 },
   btnMatch: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 13,
-    paddingLeft: 32,
-    paddingRight: 24,
-    borderTopLeftRadius: BORDER_RADIUS,
-    borderBottomLeftRadius: BORDER_RADIUS,
-    borderTopRightRadius: 0,
-    borderBottomRightRadius: 0,
-    backgroundColor: '#3d6fd8',
-    width: width * 0.58,
-    alignSelf: 'flex-end', 
-    shadowColor: '#3d6fd8',
-    shadowOffset: { width: -2, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 3,
-  },
+  flexDirection: 'row',
+  alignItems: 'center',
+  paddingVertical: 13,
+  paddingLeft: 32,
+  paddingRight: 24,
+  borderTopLeftRadius: BORDER_RADIUS,
+  borderBottomLeftRadius: BORDER_RADIUS,
+  borderTopRightRadius: 0,
+  borderBottomRightRadius: 0,
+  backgroundColor: '#5c7cfa',
+  width: width * 0.58,
+  alignSelf: 'flex-end', // 👈 مهم (می‌بره سمت راست)
+  shadowColor: '#5c7cfa',
+  shadowOffset: { width: -2, height: 2 },
+  shadowOpacity: 0.2,
+  shadowRadius: 6,
+  elevation: 3,
+},
 
-  btnMatchText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#ffffff',
-    flex: 1,
-  },
+btnMatchText: {
+  fontSize: 14,
+  fontWeight: '600',
+  color: '#ffffff',
+  flex: 1,
+},
 });

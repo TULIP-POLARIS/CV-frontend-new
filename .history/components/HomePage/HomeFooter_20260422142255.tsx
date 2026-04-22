@@ -62,7 +62,7 @@ export default function HomeFooter({ onReadPrivacy, data }: Props) {
       >
         <Icon name="analytics-outline" size={16} color="#ffffff" style={styles.icon} />
         <Text style={styles.btnMatchText}>
-          {t('home.matchJob')} 
+          {t('home.matchJob')} {/* مثلا "Check Job Fit" */}
         </Text>
       </TouchableOpacity>
     </View>
