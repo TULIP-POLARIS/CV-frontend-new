@@ -53,9 +53,16 @@ function transformGeneratedCVToCVData(response: GenerateCVResponse): CVData {
   return cvData;
 }
 
+export interface DailyStat {
+  date: string;
+  generatedCvs: number;
+  users: number;
+}
+
 export interface GeneratedCvStats {
   totalGeneratedCvs: number;
   totalUsers: number;
+  dailyStats: DailyStat[];
 }
 
 export async function generateCv({
@@ -109,8 +116,11 @@ export async function fetchGeneratedCvStats(token: string): Promise<GeneratedCvS
     throw new Error(data?.message || 'Failed to load usage metrics.');
   }
 
-  return {
-    totalGeneratedCvs: Number(data?.totalGeneratedCvs ?? 0),
-    totalUsers: Number(data?.totalUsers ?? 0),
-  };
+  const dailyStats: DailyStat[] = Array.isArray(data?.dailyStats) ? data.dailyStats : [];
+
+return {
+  totalGeneratedCvs: dailyStats.reduce((sum, d) => sum + d.generatedCvs, 0),
+  totalUsers: dailyStats.reduce((sum, d) => sum + d.users, 0),
+  dailyStats,
+};
 }

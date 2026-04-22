@@ -9,6 +9,7 @@ export type RootStackParamList = {
   CheckEmail: { email: string };
   TemplateSelect: { data: any };
   CustomizeCV: { data: any };
+  ResetPassword: { email: string };
   CVPreview: {
     data: any;
     language: string;          // ← اضافه شد

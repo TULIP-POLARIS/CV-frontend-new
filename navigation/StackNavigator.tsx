@@ -10,6 +10,8 @@ import CustomizeCVScreen from '../screens/Cv/CustomizeCVScreen';
 import CVPreviewScreen from '../screens/Cv/CVPreviewScreen';
 import UsageMetricsScreen from '../screens/Settings/UsageMetricsScreen';
 import ForgotPasswordScreen from '../screens/Auth/ForgotPasswordScreen';
+import ResetPasswordScreen from '../screens/Auth/ResetPasswordScreen';
+import CheckEmailScreen from '../screens/Auth/CheckEmailScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -19,6 +21,8 @@ export default function StackNavigator() {
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+      <Stack.Screen name="CheckEmail" component={CheckEmailScreen} />
+<Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
       <Stack.Screen name="MainTabs" component={MainTabs} />
       <Stack.Screen name="TemplateSelect" component={TemplateSelectScreen} />
       <Stack.Screen name="CustomizeCV" component={CustomizeCVScreen} />
