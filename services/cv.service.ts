@@ -1,10 +1,6 @@
 import { CVData, GenerateCVResponse } from "../types/cv";
-import React, { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
 
 const API_BASE_URL = "https://cvapiappservice-dng8e8gmh0hvdbcr.francecentral-01.azurewebsites.net/api/cv";
-const [allowStorage, setAllowStorage] = useState(false);
-  // const navigation = useNavigation<RootNavigationProp>();
 
 /**
  * Extract text from string or TextWithSource object
@@ -95,9 +91,7 @@ export async function generateCv({
   if (!res.ok) {
     throw new Error(data?.message || "Error generating the CV.");
   }
-   if (allowStorage) {
-            navigation.navigate('TemplateSelect', { data: data || {} });
-          }
+  
 
   // Transform the response to CVData format
   const cvData = transformGeneratedCVToCVData(data);

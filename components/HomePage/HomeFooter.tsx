@@ -5,6 +5,7 @@ import { useTranslation } from '../../hooks/useTranslation';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
+import { generateCv } from '../../services/cv.service';
 
 type RootNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -45,6 +46,7 @@ export default function HomeFooter({ onReadPrivacy, data }: Props) {
           if (allowStorage) {
             navigation.navigate('TemplateSelect', { data: data || {} });
           }
+          // generateCv()
         }}
         disabled={!allowStorage}
       >
