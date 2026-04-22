@@ -12,6 +12,8 @@ import UsageMetricsScreen from '../screens/Settings/UsageMetricsScreen';
 import ForgotPasswordScreen from '../screens/Auth/ForgotPasswordScreen';
 import ResetPasswordScreen from '../screens/Auth/ResetPasswordScreen';
 import CheckEmailScreen from '../screens/Auth/CheckEmailScreen';
+import PrivacyPolicyScreen from '../screens/Settings/PrivacyPolicyScreen';
+import TermsOfServiceScreen from '../screens/Settings/TermsOfServiceScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -28,6 +30,8 @@ export default function StackNavigator() {
       <Stack.Screen name="CustomizeCV" component={CustomizeCVScreen} />
       <Stack.Screen name="CVPreview" component={CVPreviewScreen} />
       <Stack.Screen name="UsageMetrics" component={UsageMetricsScreen} />
+      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
+<Stack.Screen name="TermsOfService" component={TermsOfServiceScreen} />
     </Stack.Navigator>
   );
 }
