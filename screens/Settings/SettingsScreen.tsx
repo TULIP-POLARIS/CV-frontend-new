@@ -107,13 +107,7 @@ export default function SettingsScreen() {
             thumbColor={notificationsEnabled ? '#4A90E2' : '#f4f3f4'}
           />
         </View>
-        <View style={styles.divider} />
-        <SettingItem
-          label="Dark Mode"
-          onPress={() =>
-            Alert.alert('Coming Soon', 'Dark mode feature coming soon')
-          }
-        />
+        
         <View style={styles.divider} />
         <SettingItem
           label="Usage Metrics"
