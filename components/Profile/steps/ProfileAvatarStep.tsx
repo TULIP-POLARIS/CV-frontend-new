@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -30,6 +30,7 @@ export default function ProfileAvatarStep({
   const [avatarUri, setAvatarUri] = useState<string | null>(initialUri ?? null);
   const [loading, setLoading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const uploadImage = async (uri: string) => {
     const filename = uri.split('/').pop() ?? 'photo.jpg';

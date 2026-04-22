@@ -48,7 +48,7 @@ const en = {
     email: "Email",
     emailPlaceholder: "Enter your email",
     emailError: "Enter a valid email address",
-    sendButton: "Send Reset Link",
+    sendButton: "Continue",
     sending: "Sending...",
     backToLogin: "Back to Login",
     somethingWentWrong: "Something went wrong. Please try again.",
