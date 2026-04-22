@@ -26,7 +26,6 @@ const API_URL = 'https://cvapiappservice-dng8e8gmh0hvdbcr.francecentral-01.azure
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
-  setIsLoggedIn: (value: boolean) => void; 
 };
 
 const { width } = Dimensions.get('window');
@@ -40,7 +39,7 @@ const FieldError = ({ msg }: { msg: string }) =>
     </View>
   ) : null;
 
-export default function LoginScreen({ navigation, setIsLoggedIn }: Props) {
+export default function LoginScreen({ navigation }: Props) {
   const { login } = useAuth();
   const { t } = useTranslation();
 
@@ -104,7 +103,6 @@ export default function LoginScreen({ navigation, setIsLoggedIn }: Props) {
       Alert.alert(t('login.loginFailed'), error.message || t('login.somethingWentWrong'));
     } finally {
       setLoading(false);
-      setIsLoggedIn(true);
     }
   };
 

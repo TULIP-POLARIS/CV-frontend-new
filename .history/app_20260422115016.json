@@ -40,8 +40,11 @@
         }
       ],
       "expo-web-browser",
-      "@react-native-community/datetimepicker" ,
+<<<<<<< HEAD
+      "@react-native-community/datetimepicker"
+=======
       "expo-font"
+>>>>>>> 050a4bb3f26a0ed21106c112b008a2cb220fe1ee
     ],
     "extra": {
       "eas": {

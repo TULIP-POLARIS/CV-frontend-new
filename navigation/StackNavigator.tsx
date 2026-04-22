@@ -8,6 +8,7 @@ import MainTabs from '../navigation/mainTabs';
 import TemplateSelectScreen from '../screens/Cv/TemplateSelectScreen';
 import CustomizeCVScreen from '../screens/Cv/CustomizeCVScreen';
 import CVPreviewScreen from '../screens/Cv/CVPreviewScreen';
+import UsageMetricsScreen from '../screens/Settings/UsageMetricsScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -20,6 +21,7 @@ export default function StackNavigator() {
       <Stack.Screen name="TemplateSelect" component={TemplateSelectScreen} />
       <Stack.Screen name="CustomizeCV" component={CustomizeCVScreen} />
       <Stack.Screen name="CVPreview" component={CVPreviewScreen} />
+      <Stack.Screen name="UsageMetrics" component={UsageMetricsScreen} />
     </Stack.Navigator>
   );
 }
