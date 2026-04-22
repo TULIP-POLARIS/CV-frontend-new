@@ -228,7 +228,12 @@ const de = {
     descriptionPlaceholder: "Beschreibe deine Aufgaben, Verantwortlichkeiten und Erfolge",
 
     addAnother: "Weitere Berufserfahrung hinzufügen",
-  }
+  },
+  
+  cv: {
+  selectTemplate: "CV-Vorlage auswählen",
+  template1: "Vorlage 1",
+},
 };
 
 export default de;

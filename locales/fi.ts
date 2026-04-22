@@ -185,7 +185,11 @@ const fi = {
     descriptionPlaceholder: "Kuvaile tehtäviäsi, vastuitasi ja saavutuksiasi",
 
     addAnother: "Lisää toinen työkokemus",
-  }
+  },
+  cv: {
+  selectTemplate: "Valitse CV-malli",
+  template1: "Malli 1",
+},
 };
 
 export default fi;
