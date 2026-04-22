@@ -226,7 +226,11 @@ const en = {
     descriptionPlaceholder: "Describe your role, responsibilities, and achievements",
 
     addAnother: "Add another work experience",
-  }
+  },
+  cv: {
+  selectTemplate: "Select CV Template",
+  template1: "Template 1",
+},
 };
 
 export default en;
