@@ -26,11 +26,8 @@
     "expo-crypto": "~15.0.8",
     "expo-dev-client": "~6.0.20",
     "expo-document-picker": "~14.0.8",
-<<<<<<< minoo3
     "expo-image-picker": "~17.0.10",
     "expo-haptics": "~15.0.8",
-=======
->>>>>>> main
     "expo-font": "~14.0.11",
     "expo-haptics": "~15.0.8",
     "expo-image-picker": "^55.0.19",

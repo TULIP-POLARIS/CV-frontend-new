@@ -7,15 +7,16 @@ import {
 } from "react-native";
 
 import CVTemplatePreview from "../../components/cv/CVTemplatePreview";
-
+import { useTranslation } from "../../hooks/useTranslation";
 export default function TemplateSelectScreen({ navigation, route }: any) {
   const { data } = route.params || {};
+  const { t } = useTranslation();
 
   return (
     <View style={styles.container}>
       
       {/* TITLE */}
-      <Text style={styles.title}>Select CV Template</Text>
+      <Text style={styles.title}>{t("cv.selectTemplate")}</Text>
 
       {/* SINGLE TEMPLATE */}
       <TouchableOpacity
@@ -28,7 +29,7 @@ export default function TemplateSelectScreen({ navigation, route }: any) {
         }
       >
         <CVTemplatePreview />
-        <Text style={styles.label}>Template 1</Text>
+        <Text style={styles.label}>{t("cv.template1")}</Text>
       </TouchableOpacity>
 
     </View>
@@ -48,9 +49,12 @@ const styles = StyleSheet.create({
   },
 
   cardWrapper: {
-    width: "100%",
-    alignSelf: "center",
-  },
+  width: "100%",
+  alignSelf: "center",
+  transform: [{ scale: 0.65 }],
+  marginTop: -30,
+  marginBottom: -80,
+},
 
   label: {
     marginTop: 10,

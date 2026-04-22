@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import HamburgerMenu from "../../components/HamburgerMenu";
 import { useTranslation } from "../../hooks/useTranslation";
@@ -8,8 +8,8 @@ export default function CVTemplatePreview() {
   const { t } = useTranslation();
 
   return (
-    <ScrollView>
-      <Text style={styles.pageTitle}>{t("cv.selectTemplate")}</Text>
+    
+      
 
       <View style={styles.card}>
 
@@ -129,26 +129,13 @@ export default function CVTemplatePreview() {
         </View>
       </View>
 
-      <Text style={styles.templateLabel}>{t("cv.template1")}</Text>
-    </ScrollView>
+      
+    
   );
 }
 
 const styles = StyleSheet.create({
-  pageTitle: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: "#24313c",
-    padding: 20,
-    paddingBottom: 12,
-  },
-  templateLabel: {
-    fontSize: 16,
-    textAlign: "center",
-    color: "#556070",
-    marginTop: 12,
-    marginBottom: 24,
-  },
+  
   card: {
     marginHorizontal: 16,
     backgroundColor: "#fff",
