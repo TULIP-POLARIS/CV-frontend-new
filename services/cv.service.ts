@@ -98,6 +98,7 @@ export async function generateCv({
   return {
     data: cvData,
     response: data,
+
   };
 }
 
@@ -116,11 +117,14 @@ export async function fetchGeneratedCvStats(token: string): Promise<GeneratedCvS
     throw new Error(data?.message || 'Failed to load usage metrics.');
   }
 
-  const dailyStats: DailyStat[] = Array.isArray(data?.dailyStats) ? data.dailyStats : [];
-
-return {
-  totalGeneratedCvs: dailyStats.reduce((sum, d) => sum + d.generatedCvs, 0),
-  totalUsers: dailyStats.reduce((sum, d) => sum + d.users, 0),
-  dailyStats,
-};
+  return {
+    totalGeneratedCvs: Number(data?.totalGeneratedCvs ?? 0),
+    totalUsers: Number(data?.totalUsers ?? 0),
+    dailyStats: Array.isArray(data?.dailyStats) ? data.dailyStats.map((stat: any) => ({
+      date: stat.date,
+      generatedCvs: Number(stat.generatedCvs ?? 0),
+      users: Number(stat.users ?? 0),
+    })) : [],
+  };
 }
+
