@@ -47,7 +47,7 @@ const fi = {
     email: 'Sähköposti',
     emailPlaceholder: 'Kirjoita sähköpostiosoitteesi',
     emailError: 'Kirjoita kelvollinen sähköpostiosoite',
-    sendButton: 'Jatka',
+    sendButton: 'Lähetä palautuslinkki',
     sending: 'Lähetetään...',
     backToLogin: 'Takaisin kirjautumiseen',
     somethingWentWrong: 'Jotain meni pieleen. Yritä uudelleen.',
@@ -185,11 +185,7 @@ const fi = {
     descriptionPlaceholder: "Kuvaile tehtäviäsi, vastuitasi ja saavutuksiasi",
 
     addAnother: "Lisää toinen työkokemus",
-  },
-  cv: {
-  selectTemplate: "Valitse CV-malli",
-  template1: "Malli 1",
-},
+  }
 };
 
 export default fi;

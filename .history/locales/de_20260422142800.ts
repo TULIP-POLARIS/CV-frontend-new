@@ -48,7 +48,7 @@ const de = {
     email: "E-Mail",
     emailPlaceholder: "E-Mail eingeben",
     emailError: "Gib eine gültige E-Mail-Adresse ein",
-    sendButton: "Weiter",
+    sendButton: "Link senden",
     sending: "Wird gesendet...",
     backToLogin: "Zurück zur Anmeldung",
     somethingWentWrong: "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
@@ -228,12 +228,7 @@ const de = {
     descriptionPlaceholder: "Beschreibe deine Aufgaben, Verantwortlichkeiten und Erfolge",
 
     addAnother: "Weitere Berufserfahrung hinzufügen",
-  },
-  
-  cv: {
-  selectTemplate: "CV-Vorlage auswählen",
-  template1: "Vorlage 1",
-},
+  }
 };
 
 export default de;

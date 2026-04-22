@@ -26,8 +26,8 @@ TermsOfService: undefined;
   };
 
    JobMatch: {
-      userId: string;
-    };
+    userId: string;
+  };
   UsageMetrics: undefined;
 };
 

@@ -48,7 +48,7 @@ const en = {
     email: "Email",
     emailPlaceholder: "Enter your email",
     emailError: "Enter a valid email address",
-    sendButton: "Continue",
+    sendButton: "Send Reset Link",
     sending: "Sending...",
     backToLogin: "Back to Login",
     somethingWentWrong: "Something went wrong. Please try again.",
@@ -227,11 +227,7 @@ const en = {
     descriptionPlaceholder: "Describe your role, responsibilities, and achievements",
 
     addAnother: "Add another work experience",
-  },
-  cv: {
-  selectTemplate: "Select CV Template",
-  template1: "Template 1",
-},
+  }
 };
 
 export default en;

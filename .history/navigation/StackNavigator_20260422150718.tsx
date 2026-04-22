@@ -14,8 +14,6 @@ import ResetPasswordScreen from '../screens/Auth/ResetPasswordScreen';
 import CheckEmailScreen from '../screens/Auth/CheckEmailScreen';
 import PrivacyPolicyScreen from '../screens/Settings/PrivacyPolicyScreen';
 import TermsOfServiceScreen from '../screens/Settings/TermsOfServiceScreen';
-import JobMatchScreen from '../screens/Cv/JobMatchScreen';
-
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -26,7 +24,7 @@ export default function StackNavigator() {
       <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
       <Stack.Screen name="CheckEmail" component={CheckEmailScreen} />
-      <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
+<Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
       <Stack.Screen name="MainTabs" component={MainTabs} />
       <Stack.Screen name="TemplateSelect" component={TemplateSelectScreen} />
       <Stack.Screen name="CustomizeCV" component={CustomizeCVScreen} />

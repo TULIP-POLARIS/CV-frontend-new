@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { Ionicons as Icon } from '@expo/vector-icons';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
-import { generateCv } from '../../services/cv.service';
-import { useAuth } from '../../context/AuthContext';
 
 type RootNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -20,28 +18,8 @@ type Props = {
 
 export default function HomeFooter({ onReadPrivacy, data }: Props) {
   const { t } = useTranslation();
-  const { token } = useAuth();
   const [allowStorage, setAllowStorage] = useState(false);
-  const [loading, setLoading] = useState(false);
   const navigation = useNavigation<RootNavigationProp>();
-
-  const handleGenerate = async () => {
-    if (!allowStorage || !token) return;
-    setLoading(true);
-    try {
-      const response = await generateCv({
-        token,
-        jobTitle: data?.jobTitle || '',
-        jobDescription: data?.jobDescription || '',
-      });
-      console.log('CV generated successfully:', response);
-      navigation.navigate('TemplateSelect', { data: response.data });
-    } catch (error: any) {
-      Alert.alert('Error', error.message || 'Failed to generate CV');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -62,17 +40,16 @@ export default function HomeFooter({ onReadPrivacy, data }: Props) {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[styles.btnGenerate, (!allowStorage || loading) && styles.btnDisabled]}
-        onPress={handleGenerate}
-
-        disabled={!allowStorage || loading}
+        style={[styles.btnGenerate, !allowStorage && styles.btnDisabled]}
+        onPress={() => {
+          if (allowStorage) {
+            navigation.navigate('TemplateSelect', { data: data || {} });
+          }
+        }}
+        disabled={!allowStorage}
       >
-        {loading ? (
-          <ActivityIndicator color="#ffffff" size="small" style={styles.icon} />
-        ) : (
-          <Icon name="sparkles-outline" size={18} color="#ffffff" style={styles.icon} />
-        )}
-        <Text style={styles.btnGenerateText}>{loading ? 'Generating...' : t('home.generateButton')}</Text>
+        <Icon name="sparkles-outline" size={18} color="#ffffff" style={styles.icon} />
+        <Text style={styles.btnGenerateText}>{t('home.generateButton')}</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.btnMatch}
@@ -85,7 +62,7 @@ export default function HomeFooter({ onReadPrivacy, data }: Props) {
       >
         <Icon name="analytics-outline" size={16} color="#ffffff" style={styles.icon} />
         <Text style={styles.btnMatchText}>
-          {t('home.matchJob')} 
+          {t('home.matchJob')} {/* مثلا "Check Job Fit" */}
         </Text>
       </TouchableOpacity>
     </View>
