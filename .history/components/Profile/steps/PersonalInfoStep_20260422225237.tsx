@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
   StyleSheet, Platform, Image, ActivityIndicator, Alert,
@@ -27,12 +27,18 @@ type Props = {
   onChange: (field: string, value: string) => void;
   avatarUri: string | null;
   onAvatarChange: (uri: string | null) => void;
-  errors: string[];
+  errors: string[];   
 };
 
 const AVATAR_SIZE = 90;
 
-export default function PersonalInfoStep({ data, onChange, avatarUri, onAvatarChange, errors }: Props) {
+export default function PersonalInfoStep({
+  data,
+  onChange,
+  avatarUri,
+  onAvatarChange,
+  errors,
+}: Props) {
   const { t } = useTranslation();
   const { token } = useAuth();
   const [avatarLoading, setAvatarLoading] = useState(false);
@@ -108,6 +114,7 @@ export default function PersonalInfoStep({ data, onChange, avatarUri, onAvatarCh
       }
     }
   };
+  
 
   const takePhoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -131,8 +138,6 @@ export default function PersonalInfoStep({ data, onChange, avatarUri, onAvatarCh
     }
   };
 
-  const hasError = (field: string) => errors.includes(field);
-
   return (
     <View style={styles.container}>
       <View style={styles.sectionHeader}>
@@ -147,11 +152,7 @@ export default function PersonalInfoStep({ data, onChange, avatarUri, onAvatarCh
           {avatarLoading ? (
             <View style={styles.avatarPlaceholder}><ActivityIndicator color="#3d6fd8" /></View>
           ) : avatarUri ? (
-            <Image
-              key={avatarUri}
-              source={{ uri: avatarUri }}
-              style={styles.avatar}
-            />
+            <Image source={{ uri: avatarUri }} style={styles.avatar} />
           ) : (
             <View style={styles.avatarPlaceholder}>
               <Icon name="person-outline" size={32} color="#90a4ae" />
@@ -175,11 +176,9 @@ export default function PersonalInfoStep({ data, onChange, avatarUri, onAvatarCh
 
       <View style={styles.row}>
         <View style={styles.halfField}>
-          <Text style={styles.label}>
-            {t('personalInfo.firstName')} <Text style={styles.required}>*</Text>
-          </Text>
+          <Text style={styles.label}>{t('personalInfo.firstName')} <Text style={styles.required}>*</Text></Text>
           <TextInput
-            style={[styles.input, hasError('firstName') && styles.inputError]}
+            style={styles.input}
             placeholder={t('personalInfo.firstNamePlaceholder')}
             placeholderTextColor="#b0bec5"
             value={data.firstName}
@@ -188,11 +187,9 @@ export default function PersonalInfoStep({ data, onChange, avatarUri, onAvatarCh
           />
         </View>
         <View style={styles.halfField}>
-          <Text style={styles.label}>
-            {t('personalInfo.lastName')} <Text style={styles.required}>*</Text>
-          </Text>
+          <Text style={styles.label}>{t('personalInfo.lastName')} <Text style={styles.required}>*</Text></Text>
           <TextInput
-            style={[styles.input, hasError('lastName') && styles.inputError]}
+            style={styles.input}
             placeholder={t('personalInfo.lastNamePlaceholder')}
             placeholderTextColor="#b0bec5"
             value={data.lastName}
@@ -202,13 +199,8 @@ export default function PersonalInfoStep({ data, onChange, avatarUri, onAvatarCh
         </View>
       </View>
 
-      <Text style={styles.label}>
-        {t('personalInfo.dateOfBirth')} <Text style={styles.required}>*</Text>
-      </Text>
-      <TouchableOpacity
-        style={[styles.inputRow, hasError('dateOfBirth') && styles.inputError]}
-        onPress={() => setShowDatePicker(true)}
-      >
+      <Text style={styles.label}>{t('personalInfo.dateOfBirth')} <Text style={styles.required}>*</Text></Text>
+      <TouchableOpacity style={styles.inputRow} onPress={() => setShowDatePicker(true)}>
         <Icon name="calendar-outline" size={18} color="#90a4ae" style={styles.inputIcon} />
         <Text style={[styles.inputFlex, !data.dateOfBirth && { color: '#b0bec5' }]}>
           {data.dateOfBirth || 'DD-MM-YYYY'}
@@ -227,10 +219,8 @@ export default function PersonalInfoStep({ data, onChange, avatarUri, onAvatarCh
         />
       )}
 
-      <Text style={styles.label}>
-        {t('personalInfo.gender')} <Text style={styles.required}>*</Text>
-      </Text>
-      <View style={[styles.genderRow, hasError('gender') && styles.genderError]}>
+      <Text style={styles.label}>{t('personalInfo.gender')} <Text style={styles.required}>*</Text></Text>
+      <View style={styles.genderRow}>
         {GENDERS.map(g => (
           <TouchableOpacity
             key={g}
@@ -242,10 +232,8 @@ export default function PersonalInfoStep({ data, onChange, avatarUri, onAvatarCh
         ))}
       </View>
 
-      <Text style={styles.label}>
-        {t('personalInfo.nationality')} <Text style={styles.required}>*</Text>
-      </Text>
-      <View style={[styles.inputRow, hasError('nationality') && styles.inputError]}>
+      <Text style={styles.label}>{t('personalInfo.nationality')} <Text style={styles.required}>*</Text></Text>
+      <View style={styles.inputRow}>
         <Icon name="flag-outline" size={18} color="#90a4ae" style={styles.inputIcon} />
         <TextInput
           style={styles.inputFlex}
@@ -270,10 +258,8 @@ export default function PersonalInfoStep({ data, onChange, avatarUri, onAvatarCh
         />
       </View>
 
-      <Text style={styles.label}>
-        {t('personalInfo.countryOfResidence')} <Text style={styles.required}>*</Text>
-      </Text>
-      <View style={[styles.inputRow, hasError('countryOfResidence') && styles.inputError]}>
+      <Text style={styles.label}>{t('personalInfo.countryOfResidence')} <Text style={styles.required}>*</Text></Text>
+      <View style={styles.inputRow}>
         <Icon name="earth-outline" size={18} color="#90a4ae" style={styles.inputIcon} />
         <TextInput
           style={styles.inputFlex}
@@ -347,14 +333,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#dce8fb', borderRadius: 10,
     paddingHorizontal: 14, borderWidth: 1.5, borderColor: 'transparent',
   },
-  inputError: { borderColor: '#e53935' },
   inputIcon: { marginRight: 10 },
   inputFlex: { flex: 1, paddingVertical: Platform.OS === 'ios' ? 13 : 9, fontSize: 15, color: '#263238' },
-  genderRow: {
-    flexDirection: 'row', gap: 10,
-    borderRadius: 10, borderWidth: 1.5, borderColor: 'transparent', padding: 2,
-  },
-  genderError: { borderColor: '#e53935' },
+  genderRow: { flexDirection: 'row', gap: 10 },
   genderBtn: {
     flex: 1, paddingVertical: 10, borderRadius: 10,
     borderWidth: 1.5, borderColor: '#dce8fb', backgroundColor: '#f0f4ff', alignItems: 'center',

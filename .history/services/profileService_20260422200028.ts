@@ -41,6 +41,7 @@ export const loadProfile = async (token: string) => {
   const skills = skillsRes.ok ? await skillsRes.json() : [];
   const languages = languagesRes.ok ? await languagesRes.json() : [];
 
+  // picture is separate endpoint (IMPORTANT FIX)
   let profilePictureUrl = null;
 
   try {
@@ -50,6 +51,7 @@ export const loadProfile = async (token: string) => {
     );
 
     if (picRes.ok) {
+      // اگر URL بده
       const text = await picRes.text();
       profilePictureUrl = text || null;
     }
@@ -66,6 +68,9 @@ export const loadProfile = async (token: string) => {
 };
 
 
+// =====================
+// 📌 SAVE PERSONAL
+// =====================
 export const savePersonal = async (token: string, data: any) => {
   const res = await fetch(`${BASE_URL}/api/profile/personal`, {
     method: 'PUT',
@@ -85,6 +90,9 @@ export const savePersonal = async (token: string, data: any) => {
 };
 
 
+// =====================
+// 📌 UPLOAD PROFILE PICTURE
+// =====================
 export const uploadProfilePicture = async (
   token: string,
   uri: string
@@ -115,6 +123,9 @@ export const uploadProfilePicture = async (
 };
 
 
+// =====================
+// 📌 DELETE PICTURE
+// =====================
 export const deleteProfilePicture = async (token: string) => {
   await fetch(`${BASE_URL}/api/profile/personal/picture`, {
     method: 'DELETE',
