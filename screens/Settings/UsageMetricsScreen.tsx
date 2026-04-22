@@ -5,11 +5,6 @@ import { useAuth } from '../../context/AuthContext';
 import { LineChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
 
-const metricBars = [
-  { key: 'totalGeneratedCvs', label: 'Generated CVs', color: '#4A90E2' },
-  { key: 'totalUsers', label: 'Total Users', color: '#3d6fd8' },
-];
-
 export default function UsageMetricsScreen() {
   const { token } = useAuth();
   const [stats, setStats] = useState<GeneratedCvStats | null>(null);
@@ -26,6 +21,7 @@ export default function UsageMetricsScreen() {
 
       try {
         const data = await fetchGeneratedCvStats(token);
+        console.log('Fetched stats:', data);
         setStats(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load metrics.');
@@ -37,14 +33,38 @@ export default function UsageMetricsScreen() {
     loadStats();
   }, [token]);
 
-  const chartData = stats
-    ? metricBars.map((bar) => ({
-        ...bar,
-        value: stats[bar.key as keyof GeneratedCvStats] as number,
-      }))
-    : [];
+  const dailyStats: { date: string; generatedCvs: number; users: number }[] =
+    (stats as any)?.dailyStats || [];
 
-  const maxValue = Math.max(...chartData.map((item) => item.value), 1);
+  const hasData = dailyStats.length > 0;
+
+  // Fallback to summing up the daily stats if the total fields return 0
+  const displayTotalCvs = stats?.totalGeneratedCvs || dailyStats.reduce((sum, item) => sum + item.generatedCvs, 0);
+  const displayTotalUsers = stats?.totalUsers || dailyStats.reduce((sum, item) => sum + item.users, 0);
+
+  const lineChartData = {
+    labels: hasData
+      ? dailyStats.map((d) => {
+          const parts = d.date.split('-');
+          return parts.length === 3 ? `${parts[1]}/${parts[2]}` : d.date;
+        })
+      : ['No Data'],
+    datasets: [
+      {
+        data: hasData ? dailyStats.map((d) => d.generatedCvs) : [0],
+        color: (opacity = 1) => `rgba(74, 144, 226, ${opacity})`, // #4A90E2
+        strokeWidth: 2,
+      },
+      {
+        data: hasData ? dailyStats.map((d) => d.users) : [0],
+        color: (opacity = 1) => `rgba(61, 111, 216, ${opacity})`, // #3d6fd8
+        strokeWidth: 2,
+      },
+    ],
+    legend: ['Generated CVs', 'Users'],
+  };
+
+  const chartWidth = Dimensions.get('window').width - 80;
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -67,35 +87,37 @@ export default function UsageMetricsScreen() {
           <View style={styles.summaryRow}>
             <View style={styles.summaryCard}>
               <Text style={styles.summaryLabel}>Generated CVs</Text>
-              <Text style={styles.summaryValue}>{stats?.totalGeneratedCvs ?? 0}</Text>
+              <Text style={styles.summaryValue}>{displayTotalCvs}</Text>
             </View>
             <View style={styles.summaryCard}>
               <Text style={styles.summaryLabel}>Total Users</Text>
-              <Text style={styles.summaryValue}>{stats?.totalUsers ?? 0}</Text>
+              <Text style={styles.summaryValue}>{displayTotalUsers}</Text>
             </View>
           </View>
 
           <View style={styles.chartCard}>
             <Text style={styles.chartTitle}>Usage Overview</Text>
-            {chartData.map((item) => (
-              <View key={item.key} style={styles.chartRow}>
-                <View style={styles.barLabelRow}>
-                  <Text style={styles.barLabel}>{item.label}</Text>
-                  <Text style={styles.barValue}>{item.value}</Text>
-                </View>
-                <View style={styles.barTrack}>
-                  <View
-                    style={[
-                      styles.barFill,
-                      {
-                        width: `${(item.value / maxValue) * 100}%`,
-                        backgroundColor: item.color,
-                      },
-                    ]}
-                  />
-                </View>
-              </View>
-            ))}
+            {hasData ? (
+              <LineChart
+                data={lineChartData}
+                width={chartWidth}
+                height={220}
+                chartConfig={{
+                  backgroundColor: '#ffffff',
+                  backgroundGradientFrom: '#ffffff',
+                  backgroundGradientTo: '#ffffff',
+                  decimalPlaces: 0,
+                  color: (opacity = 1) => `rgba(144, 164, 174, ${opacity})`,
+                  labelColor: (opacity = 1) => `rgba(85, 96, 112, ${opacity})`,
+                  style: { borderRadius: 16 },
+                  propsForDots: { r: '4', strokeWidth: '2', stroke: '#fff' },
+                }}
+                bezier
+                style={styles.chartStyle}
+              />
+            ) : (
+              <Text style={styles.description}>No daily stats available to display.</Text>
+            )}
           </View>
         </>
       )}
@@ -185,32 +207,9 @@ const styles = StyleSheet.create({
     marginBottom: 18,
     color: '#24313c',
   },
-  chartRow: {
-    marginBottom: 18,
-  },
-  barLabelRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 8,
-  },
-  barLabel: {
-    color: '#556070',
-    fontSize: 14,
-  },
-  barValue: {
-    color: '#24313c',
-    fontSize: 14,
-    fontWeight: '700',
-  },
-  barTrack: {
-    width: '100%',
-    height: 12,
-    borderRadius: 999,
-    backgroundColor: '#eef2f6',
-    overflow: 'hidden',
-  },
-  barFill: {
-    height: '100%',
-    borderRadius: 999,
+  chartStyle: {
+    marginVertical: 8,
+    borderRadius: 16,
+    marginLeft: -10,
   },
 });
