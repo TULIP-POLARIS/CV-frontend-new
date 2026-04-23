@@ -1,47 +1,34 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-
+import { useTranslation } from '../../hooks/useTranslation';
+import HamburgerMenu from "../../components/HamburgerMenu";
 export default function PrivacyPolicyScreen() {
+  const { t } = useTranslation();
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Text style={styles.title}>Privacy Policy</Text>
-      <Text style={styles.updated}>Last updated: April 2025</Text>
-
-      <Section title="1. Information We Collect">
-        We collect information you provide directly to us, such as your name, email address, and any CV data you submit through the app.
-      </Section>
-
-      <Section title="2. How We Use Your Information">
-        We use the information we collect to provide, maintain, and improve our services, generate your CV, and communicate with you.
-      </Section>
-
-      <Section title="3. Data Storage">
-        Your data is stored securely on our servers. We do not sell your personal information to third parties.
-      </Section>
-
-      <Section title="4. Cookies">
-        We may use cookies and similar tracking technologies to track activity on our service and hold certain information.
-      </Section>
-
-      <Section title="5. Third-Party Services">
-        We may employ third-party companies to facilitate our service. These third parties have access to your data only to perform tasks on our behalf.
-      </Section>
-
-      <Section title="6. Security">
-        The security of your data is important to us. We strive to use commercially acceptable means to protect your personal information.
-      </Section>
-
-      <Section title="7. Contact Us">
-        If you have any questions about this Privacy Policy, please contact us at FontysOulu@crosschecker.io
-      </Section>
+        {/* HEADER WITH HAMBURGER */}
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>{t('privacyPolicy.title')}</Text>
+        <HamburgerMenu tintColor="#263238" />
+      </View>
+      
+      <Text style={styles.updated}>{t('privacyPolicy.updated')}</Text>
+      <Section title={t('privacyPolicy.s1Title')} body={t('privacyPolicy.s1Body')} />
+      <Section title={t('privacyPolicy.s2Title')} body={t('privacyPolicy.s2Body')} />
+      <Section title={t('privacyPolicy.s3Title')} body={t('privacyPolicy.s3Body')} />
+      <Section title={t('privacyPolicy.s4Title')} body={t('privacyPolicy.s4Body')} />
+      <Section title={t('privacyPolicy.s5Title')} body={t('privacyPolicy.s5Body')} />
+      <Section title={t('privacyPolicy.s6Title')} body={t('privacyPolicy.s6Body')} />
+      <Section title={t('privacyPolicy.s7Title')} body={t('privacyPolicy.s7Body')} />
     </ScrollView>
   );
 }
 
-const Section = ({ title, children }: { title: string; children: string }) => (
+const Section = ({ title, body }: { title: string; body: string }) => (
   <View style={styles.section}>
     <Text style={styles.sectionTitle}>{title}</Text>
-    <Text style={styles.sectionBody}>{children}</Text>
+    <Text style={styles.sectionBody}>{body}</Text>
   </View>
 );
 
@@ -51,16 +38,21 @@ const styles = StyleSheet.create({
   title: { fontSize: 24, fontWeight: '700', color: '#24313c', marginBottom: 4 },
   updated: { fontSize: 12, color: '#90a4ae', marginBottom: 24 },
   section: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOpacity: 0.04,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
+    backgroundColor: '#fff', borderRadius: 12, padding: 16,
+    marginBottom: 12, shadowColor: '#000', shadowOpacity: 0.04,
+    shadowRadius: 6, shadowOffset: { width: 0, height: 2 }, elevation: 2,
   },
   sectionTitle: { fontSize: 15, fontWeight: '700', color: '#3d6fd8', marginBottom: 8 },
   sectionBody: { fontSize: 14, color: '#556070', lineHeight: 22 },
+  header: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: 10,
+},
+headerTitle: {
+  fontSize: 24,
+  fontWeight: '700',
+  color: '#24313c',
+},
 });

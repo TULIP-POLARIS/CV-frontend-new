@@ -14,6 +14,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation, setLanguage, Language } from '../../hooks/useTranslation';
+import HamburgerMenu from '../../components/HamburgerMenu';
 
 type NavProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -26,15 +27,15 @@ const LANGUAGES: { code: Language; label: string; name: string }[] = [
 export default function SettingsScreen() {
   const navigation = useNavigation<NavProp>();
   const { logout, email } = useAuth();
-  const { language } = useTranslation();
+  const { t, language } = useTranslation();
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
   const [langExpanded, setLangExpanded] = React.useState(false);
 
   const handleLogout = () => {
-    Alert.alert('Logout', 'Are you sure you want to log out?', [
-      { text: 'Cancel', style: 'cancel' },
+    Alert.alert(t('settings.logoutTitle'), t('settings.logoutMessage'), [
+      { text: t('settings.cancel'), style: 'cancel' },
       {
-        text: 'Logout',
+        text: t('settings.logoutConfirm'),
         style: 'destructive',
         onPress: async () => {
           await logout();
@@ -78,28 +79,33 @@ export default function SettingsScreen() {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <SettingSection title="Account">
+{/* HEADER WITH HAMBURGER */}
+<View style={styles.header}>
+  <Text style={styles.headerTitle}>Settings</Text>
+  <HamburgerMenu tintColor="#263238" />
+</View>
+      <SettingSection title={t('settings.account')}>
         <SettingItem
-          label="Edit Profile"
+          label={t('settings.editProfile')}
           onPress={() => navigation.navigate('Profile')}
         />
         <View style={styles.divider} />
         <SettingItem
-  label="Change Password"
-  onPress={() => navigation.navigate('ResetPassword', { email: email ?? '' })}
-  rightElement={
-    <Icon name="chevron-forward-outline" size={16} color="#90a4ae" />
-  }
-/>
+          label={t('settings.changePassword')}
+          onPress={() => navigation.navigate('ResetPassword', { email: email ?? '' })}
+          rightElement={
+            <Icon name="chevron-forward-outline" size={16} color="#90a4ae" />
+          }
+        />
         <View style={styles.divider} />
         <SettingItem
           label={`Email: ${email ?? 'Not available'}`}
         />
       </SettingSection>
 
-      <SettingSection title="App Settings">
+      <SettingSection title={t('settings.appSettings')}>
         <View style={styles.settingItem}>
-          <Text style={styles.settingLabel}>Push Notifications</Text>
+          <Text style={styles.settingLabel}>{t('settings.pushNotifications')}</Text>
           <Switch
             value={notificationsEnabled}
             onValueChange={setNotificationsEnabled}
@@ -110,7 +116,7 @@ export default function SettingsScreen() {
         
         <View style={styles.divider} />
         <SettingItem
-          label="Usage Metrics"
+          label={t('settings.usageMetrics')}
           onPress={() => navigation.navigate('UsageMetrics')}
           rightElement={
             <Icon name="stats-chart-outline" size={20} color="#90a4ae" />
@@ -118,7 +124,7 @@ export default function SettingsScreen() {
         />
         <View style={styles.divider} />
         <SettingItem
-          label="Language"
+          label={t('settings.language')}
           onPress={() => setLangExpanded((value) => !value)}
           rightElement={
             <View style={styles.menuItemRight}>
@@ -162,9 +168,9 @@ export default function SettingsScreen() {
         )}
       </SettingSection>
 
-      <SettingSection title="Privacy & Support">
+      <SettingSection title={t('settings.privacySupport')}>
         <SettingItem
-          label="Privacy Policy"
+          label={t('settings.privacyPolicy')}
           onPress={() => navigation.navigate('PrivacyPolicy')}
           rightElement={
             <Icon name="chevron-forward-outline" size={16} color="#90a4ae" />
@@ -172,7 +178,7 @@ export default function SettingsScreen() {
         />
         <View style={styles.divider} />
         <SettingItem
-          label="Terms of Service"
+          label={t('settings.termsOfService')}
           onPress={() => navigation.navigate('TermsOfService')}
           rightElement={
             <Icon name="chevron-forward-outline" size={16} color="#90a4ae" />
@@ -180,24 +186,24 @@ export default function SettingsScreen() {
         />
         <View style={styles.divider} />
         <SettingItem
-          label="Help & Support"
+          label={t('settings.helpSupport')}
           onPress={() =>
-            Alert.alert('Support', 'Contact us at FontysOulu@crosschecker.io')
+            Alert.alert('Support', t('settings.supportMessage'))
           }
         />
       </SettingSection>
 
-      <SettingSection title="About">
-        <SettingItem label="App Version: 1.0.0" />
+      <SettingSection title={t('settings.about')}>
+        <SettingItem label={t('settings.appVersion')} />
         <View style={styles.divider} />
         <SettingItem
-          label="Check for Updates"
-          onPress={() => Alert.alert('Updates', 'You have the latest version')}
+          label={t('settings.checkUpdates')}
+          onPress={() => Alert.alert('Updates', t('settings.updatesMessage'))}
         />
       </SettingSection>
 
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutText}>Logout</Text>
+        <Text style={styles.logoutText}>{t('settings.logout')}</Text>
       </TouchableOpacity>
 
       <View style={styles.bottomPadding} />
@@ -307,4 +313,17 @@ const styles = StyleSheet.create({
   bottomPadding: {
     height: 40,
   },
+  header: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  paddingHorizontal: 16,
+  paddingVertical: 16,
+  marginBottom: 8,
+},
+headerTitle: {
+  fontSize: 24,
+  fontWeight: '700',
+  color: '#24313c',
+},
 });
